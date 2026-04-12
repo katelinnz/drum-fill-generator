@@ -83,6 +83,7 @@
       display: flex;
       flex-direction: column;
       gap: 8px;
+      position: relative;
     }
 
     label {
@@ -131,6 +132,66 @@
     #generateBtn { background: var(--button); }
     #generateBtn:hover { background: var(--button-hover); }
     #copyJsonBtn { background: var(--button-2); }
+
+    .multi-select-trigger {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-align: left;
+      padding-right: 14px;
+    }
+
+    .multi-select-trigger .caret {
+      font-size: 18px;
+      color: var(--text);
+      flex: 0 0 auto;
+    }
+
+    .multi-select-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      right: 0;
+      z-index: 50;
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    }
+
+    .multi-select-menu.hidden {
+      display: none;
+    }
+
+    .menu-actions {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .menu-actions button {
+      min-height: 38px;
+      font-size: 14px;
+      padding: 0 12px;
+    }
+
+    .group-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 6px;
+      color: var(--text);
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .group-option input {
+      width: 18px;
+      height: 18px;
+      margin: 0;
+      accent-color: #f05ba7;
+    }
 
     .settings-block {
       display: flex;
@@ -381,7 +442,7 @@
   <div class="wrap">
     <div class="header">
       <h1>Drum Fill Generator</h1>
-      <div class="version">v1.13</div>
+      <div class="version">v1.15</div>
     </div>
 
     <div class="controls">
@@ -405,13 +466,22 @@
 
       <div class="control">
         <label>Group sizes</label>
-        <select id="groupSizes">
-          <option value="2,3,4,5" selected>2, 3, 4, 5</option>
-          <option value="2,3,4">2, 3, 4</option>
-          <option value="2,3,5">2, 3, 5</option>
-          <option value="2,4,5">2, 4, 5</option>
-          <option value="3,4,5">3, 4, 5</option>
-        </select>
+        <button type="button" id="groupSizesTrigger" class="multi-select-trigger">
+          <span id="groupSizesSummary">2, 3, 4, 5</span>
+          <span class="caret">▾</span>
+        </button>
+        <div id="groupSizesMenu" class="multi-select-menu hidden">
+          <div class="menu-actions">
+            <button type="button" id="selectAllGroupsBtn">Select all</button>
+            <button type="button" id="deselectAllGroupsBtn">Deselect all</button>
+          </div>
+          <label class="group-option"><input type="checkbox" class="group-size-option" value="2" checked> 2</label>
+          <label class="group-option"><input type="checkbox" class="group-size-option" value="3" checked> 3</label>
+          <label class="group-option"><input type="checkbox" class="group-size-option" value="4" checked> 4</label>
+          <label class="group-option"><input type="checkbox" class="group-size-option" value="5" checked> 5</label>
+          <label class="group-option"><input type="checkbox" class="group-size-option" value="6"> 6</label>
+          <label class="group-option"><input type="checkbox" class="group-size-option" value="7"> 7</label>
+        </div>
       </div>
 
       <div class="control">
@@ -558,7 +628,151 @@ R K | R L | L K | L R | R L K L R | L K L`
       });
     }
 
+    function getSelectedGroupSizes() {
+      return Array.from(document.querySelectorAll('.group-size-option:checked'))
+        .map(el => Number(el.value))
+        .sort((a, b) => a - b);
+    }
+
+    function updateGroupSizesSummary() {
+      const values = getSelectedGroupSizes();
+      document.getElementById('groupSizesSummary').textContent = values.length ? values.join(', ') : 'None selected';
+    }
+
+    const groupSizesTrigger = document.getElementById('groupSizesTrigger');
+    const groupSizesMenu = document.getElementById('groupSizesMenu');
+    const selectAllGroupsBtn = document.getElementById('selectAllGroupsBtn');
+    const deselectAllGroupsBtn = document.getElementById('deselectAllGroupsBtn');
+
+    groupSizesTrigger.addEventListener('click', () => {
+      groupSizesMenu.classList.toggle('hidden');
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!groupSizesTrigger.contains(event.target) && !groupSizesMenu.contains(event.target)) {
+        groupSizesMenu.classList.add('hidden');
+      }
+    });
+
+    document.querySelectorAll('.group-size-option').forEach(el => {
+      el.addEventListener('change', updateGroupSizesSummary);
+    });
+
+    selectAllGroupsBtn.addEventListener('click', () => {
+      document.querySelectorAll('.group-size-option').forEach(el => { el.checked = true; });
+      updateGroupSizesSummary();
+    });
+
+    deselectAllGroupsBtn.addEventListener('click', () => {
+      document.querySelectorAll('.group-size-option').forEach(el => { el.checked = false; });
+      updateGroupSizesSummary();
+    });
+
+    updateGroupSizesSummary();
+
     document.getElementById('generateBtn').addEventListener('click', generate);
+  </script>
+  <script>
+    (function () {
+      let audioCtx = null;
+      let activeButton = null;
+      let activeTimeout = null;
+      let activeNodes = [];
+
+      function ensureAudio() {
+        if (!audioCtx) {
+          const Ctx = window.AudioContext || window.webkitAudioContext;
+          audioCtx = new Ctx();
+        }
+        if (audioCtx.state === 'suspended') {
+          return audioCtx.resume().then(function () { return audioCtx; });
+        }
+        return Promise.resolve(audioCtx);
+      }
+
+      function stopPlayback() {
+        if (activeTimeout) {
+          clearTimeout(activeTimeout);
+          activeTimeout = null;
+        }
+        activeNodes.forEach(function (node) {
+          try { if (node.stop) node.stop(); } catch (e) {}
+          try { if (node.disconnect) node.disconnect(); } catch (e) {}
+        });
+        activeNodes = [];
+        if (activeButton) {
+          activeButton.textContent = 'Play beat';
+          activeButton = null;
+        }
+      }
+
+      function parseChart(preEl) {
+        const lines = preEl.textContent.trim().split(String.fromCharCode(10));
+        return lines.map(function (line) {
+          return line.split('|').join(' ').trim().split(' ').filter(Boolean);
+        });
+      }
+
+      function playTone(ctx, freq, start, duration, gainValue, type) {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, start);
+        gain.gain.setValueAtTime(gainValue, start);
+        gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(start);
+        osc.stop(start + duration);
+        activeNodes.push(osc, gain);
+      }
+
+      function triggerStep(ctx, note, hat, accent, start) {
+        if (hat === 'x' || hat === 'X') playTone(ctx, 1400, start, 0.04, 0.035, 'square');
+        if (note === 'K') playTone(ctx, accent ? 95 : 75, start, 0.12, accent ? 0.34 : 0.24, 'sine');
+        if (note === 'R' || note === 'L') playTone(ctx, accent ? 210 : 180, start, 0.08, accent ? 0.17 : 0.1, 'triangle');
+      }
+
+      function playChart(button) {
+        if (activeButton === button) {
+          stopPlayback();
+          return;
+        }
+
+        const shell = button.parentElement && button.parentElement.nextElementSibling;
+        const preEl = shell ? shell.querySelector('pre') : null;
+        if (!preEl) return;
+
+        const rows = parseChart(preEl);
+        const accents = rows[0] || [];
+        const hats = rows[1] || [];
+        const notes = rows[2] || [];
+        const bpmInput = document.querySelector('.bpm-group input');
+        const bpm = parseInt(bpmInput ? bpmInput.value : '80', 10) || 80;
+        const stepMs = (60000 / bpm) / 4;
+
+        stopPlayback();
+        ensureAudio().then(function (ctx) {
+          const startTime = ctx.currentTime + 0.04;
+          notes.forEach(function (note, i) {
+            const when = startTime + (i * stepMs) / 1000;
+            triggerStep(ctx, note, hats[i], accents[i] === '>', when);
+          });
+          activeButton = button;
+          activeButton.textContent = 'Stop';
+          activeTimeout = setTimeout(function () {
+            stopPlayback();
+          }, notes.length * stepMs + 140);
+        });
+      }
+
+      document.addEventListener('click', function (event) {
+        const btn = event.target.closest('.chart-actions button');
+        if (btn) {
+          playChart(btn);
+        }
+      });
+    })();
   </script>
 </body>
 </html>
