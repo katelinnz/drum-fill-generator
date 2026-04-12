@@ -356,6 +356,23 @@
         padding: 16px;
       }
       select, input[type="number"], button { min-height: 54px; }
+      .settings-block,
+      .bpm-group,
+      .playback-block,
+      .actions-block { grid-column: 1 / -1; }
+      .actions-block { order: 10; }
+      .exercise { padding: 16px; }
+      .exercise h2 { font-size: 32px; }
+      .chart-actions button { min-width: 132px; font-size: 20px; }
+      pre { font-size: 24px; padding: 16px 18px; }
+    }
+      .header { margin-bottom: 14px; }
+      .controls {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+        padding: 16px;
+      }
+      select, input[type="number"], button { min-height: 54px; }
       .playback-block,
       .actions-block { grid-column: 1 / -1; }
       .exercise { padding: 16px; }
@@ -368,6 +385,78 @@
       .wrap {
         padding: 10px 12px 24px;
       }
+
+      .header {
+        align-items: center;
+      }
+
+      .controls {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        padding: 14px;
+      }
+
+      .control,
+      .settings-block,
+      .bpm-group,
+      .playback-block,
+      .actions-block {
+        grid-column: 1 / -1;
+      }
+
+      .actions-block {
+        order: 10;
+      }
+
+      select,
+      input[type="number"],
+      button {
+        min-height: 48px;
+        padding: 0 14px;
+      }
+
+      select,
+      input[type="number"] {
+        font-size: 16px;
+      }
+
+      .settings-block,
+      .playback-block {
+        gap: 14px 18px;
+      }
+
+      .settings-check {
+        font-size: 14px;
+      }
+
+      .actions-block {
+        gap: 10px;
+      }
+
+      .actions-block button {
+        font-size: 18px;
+      }
+
+      .exercise { padding: 14px; }
+      .exercise h2 { font-size: 28px; }
+      .chart-title { font-size: 24px; }
+      .chart-actions button {
+        min-width: 122px;
+        font-size: 18px;
+        padding: 12px 18px;
+      }
+      .chart-shell {
+        overflow-x: auto;
+        overflow-y: hidden;
+      }
+      pre {
+        width: max-content;
+        min-width: 100%;
+        font-size: 15px;
+        line-height: 1.55;
+        padding: 14px 16px;
+      }
+    }
 
       .header {
         align-items: center;
@@ -489,7 +578,7 @@
   <div class="wrap">
     <div class="header">
       <h1>Drum Fill Generator</h1>
-      <div class="version">v1.22</div>
+      <div class="version">v1.23</div>
     </div>
 
     <div class="controls">
