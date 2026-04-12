@@ -402,7 +402,7 @@
   <div class="wrap">
     <div class="header">
       <h1>Drum Fill Generator</h1>
-      <div class="version">v1.25</div>
+      <div class="version">v1.28</div>
     </div>
 
     <div class="controls">
@@ -482,69 +482,256 @@
   </div>
 
   <script>
-    const STICKINGS = [
-      {
-        title: '2 | 3 | 4 | 5 | 2',
-        sticking: `> . | > . . | > . . . | > . . . . | > .
-x - | - - x | - - - x | - - - - x | - -
-R L | R L R | L R L L | R L R L R | L R`,
-        orchestration: `> . | > . . | > . . . | > . . . . | > .
-x - | - - x | - - - x | - - - - x | - -
-R L | R L K | L K L L | R L K L R | L K`
-      },
-      {
-        title: '3 | 3 | 3 | 4 | 3',
-        sticking: `> . . | > . . | > . . | > . . . | > . .
-x - - | - x - | - - x | - - - x | - - -
-R L R | L R L | R L R | L R L L | R L R`,
-        orchestration: `> . . | > . . | > . . | > . . . | > . .
-x - - | - x - | - - x | - - - x | - - -
-R L K | L R L | R L K | L R L L | R K R`
-      },
-      {
-        title: '4 | 4 | 3 | 3 | 2',
-        sticking: `> . . . | > . . . | > . . | > . . | > .
-x - - - | x - - - | - - x | - - x | - -
-R L R L | L R L R | R L R | L R L | R L`,
-        orchestration: `> . . . | > . . . | > . . | > . . | > .
-x - - - | x - - - | - - x | - - x | - -
-R L K L | L R L K | R L R | L K L | R K`
-      },
-      {
-        title: '5 | 4 | 3 | 2 | 2',
-        sticking: `> . . . . | > . . . | > . . | > . | > .
-x - - - x | - - - x | - - - | x - | - -
-R L R L R | L R L L | R L R | L R | R L`,
-        orchestration: `> . . . . | > . . . | > . . | > . | > .
-x - - - x | - - - x | - - - | x - | - -
-R L K L R | L R L K | R L K | L R | R K`
-      },
-      {
-        title: '2 | 2 | 2 | 2 | 5 | 3',
-        sticking: `> . | > . | > . | > . | > . . . . | > . .
-x - | - x | x - | - x | - - - - x | - - -
-R L | R L | L R | L R | R L R L R | L R L`,
-        orchestration: `> . | > . | > . | > . | > . . . . | > . .
-x - | - x | x - | - x | - - - - x | - - -
-R K | R L | L K | L R | R L K L R | L K L`
+    var TOTAL_STEPS = 16;
+    var audioCtx = null;
+    var activeButton = null;
+    var activeTimer = null;
+    var activeNodes = [];
+    var sampleBuffers = { kick: null, snare: null, hihat: null };
+    var samplesAttempted = false;
+    var lastExercises = [];
+
+    function rand(n) {
+      return Math.floor(Math.random() * n);
+    }
+
+    function choice(arr) {
+      return arr[rand(arr.length)];
+    }
+
+    function opposite(hand) {
+      return hand === 'R' ? 'L' : 'R';
+    }
+
+    function compositions(total, sizes) {
+      var results = [];
+      function walk(remaining, acc) {
+        if (remaining === 0) {
+          results.push(acc.slice());
+          return;
+        }
+        sizes.forEach(function (size) {
+          if (size <= remaining) {
+            acc.push(size);
+            walk(remaining - size, acc);
+            acc.pop();
+          }
+        });
       }
-    ];
+      walk(total, []);
+      return results;
+    }
 
-    let audioCtx = null;
-    let activeButton = null;
-    let activeTimeout = null;
-    let activeNodes = [];
-    const sampleBuffers = { kick: null, snare: null, hihat: null };
-    let samplesAttempted = false;
+    function groupingWeight(grouping, chopMode) {
+      var groups = grouping.length;
+      var variance = 0;
+      for (var i = 1; i < grouping.length; i += 1) {
+        variance += Math.abs(grouping[i] - grouping[i - 1]);
+      }
+      var weight = 1 + variance;
+      if (chopMode) weight += groups * 2;
+      if (!chopMode) weight += Math.max(0, 7 - groups) * 1.5;
+      return weight;
+    }
 
-    function pickRandomExercise() {
-      const index = Math.floor(Math.random() * STICKINGS.length);
-      return STICKINGS[index];
+    function chooseGrouping(selectedSizes, chopMode) {
+      var all = compositions(TOTAL_STEPS, selectedSizes);
+      if (!all.length) return null;
+      var pool = [];
+      all.forEach(function (g) {
+        var copies = Math.max(1, Math.round(groupingWeight(g, chopMode)));
+        for (var i = 0; i < copies; i += 1) pool.push(g);
+      });
+      return choice(pool).slice();
+    }
+
+    function safePush(seq, hand) {
+      var len = seq.length;
+      if (len >= 2 && seq[len - 1] === hand && seq[len - 2] === hand) {
+        seq.push(opposite(hand));
+      } else {
+        seq.push(hand);
+      }
+    }
+
+    function makeSingle(size, start) {
+      var seq = [];
+      var hand = start;
+      for (var i = 0; i < size; i += 1) {
+        safePush(seq, hand);
+        hand = opposite(hand);
+      }
+      return seq;
+    }
+
+    function makeDouble(size, start) {
+      var seq = [];
+      var hand = start;
+      while (seq.length < size) {
+        safePush(seq, hand);
+        if (seq.length < size) safePush(seq, hand);
+        hand = opposite(hand);
+      }
+      return seq.slice(0, size);
+    }
+
+    function makeInvertedDouble(size, start) {
+      var other = opposite(start);
+      var base = [start, other, other, start];
+      var seq = [];
+      while (seq.length < size) {
+        for (var i = 0; i < base.length && seq.length < size; i += 1) {
+          safePush(seq, base[i]);
+        }
+      }
+      return seq;
+    }
+
+    function makeParadiddle(size, start) {
+      var other = opposite(start);
+      var base = [start, other, start, start];
+      var seq = [];
+      while (seq.length < size) {
+        for (var i = 0; i < base.length && seq.length < size; i += 1) {
+          safePush(seq, base[i]);
+        }
+        start = opposite(start);
+        other = opposite(start);
+        base = [start, other, start, start];
+      }
+      return seq;
+    }
+
+    function makeRoll(size, start) {
+      return makeDouble(size, start);
+    }
+
+    function chooseRudiment(size, requested) {
+      if (requested && requested !== 'random') return requested;
+      var pool = ['single', 'double', 'inverted-double', 'paradiddle', 'roll'];
+      if (size === 2) pool = ['single', 'double'];
+      if (size === 3) pool = ['single', 'inverted-double'];
+      return choice(pool);
+    }
+
+    function patternForRudiment(size, rudiment, start) {
+      if (rudiment === 'single') return makeSingle(size, start);
+      if (rudiment === 'double') return makeDouble(size, start);
+      if (rudiment === 'inverted-double') return makeInvertedDouble(size, start);
+      if (rudiment === 'paradiddle') return makeParadiddle(size, start);
+      if (rudiment === 'roll') return makeRoll(size, start);
+      return makeSingle(size, start);
+    }
+
+    function accentsForGroup(size, rudiment, complexity) {
+      var accents = new Array(size).fill(false);
+      accents[0] = true;
+      if (complexity === 'intermediate') {
+        if (rudiment === 'paradiddle' && size >= 4) accents[2] = true;
+        if (rudiment === 'inverted-double' && size >= 4) accents[3] = true;
+        if (size >= 5 && Math.random() < 0.35) accents[size - 2] = true;
+      }
+      return accents;
+    }
+
+    function applyGhosts(notes, accents, complexity, enabled) {
+      if (!enabled) return notes.slice();
+      var out = notes.slice();
+      for (var i = 0; i < out.length; i += 1) {
+        if (accents[i]) continue;
+        if (out[i] === 'L') out[i] = 'l';
+        if (complexity === 'intermediate' && out[i] === 'R' && Math.random() < 0.12) out[i] = 'r';
+      }
+      return out;
+    }
+
+    function orchestrate(notes, accents, chopMode, forceStart) {
+      var out = notes.slice();
+      for (var i = 0; i < out.length; i += 1) {
+        var n = out[i];
+        var upper = n.toUpperCase();
+        if (accents[i]) continue;
+        if (i === 0 && forceStart) continue;
+        if ((upper === 'R' || upper === 'L')) {
+          var chance = chopMode ? 0.42 : 0.26;
+          if (Math.random() < chance) out[i] = 'K';
+        }
+      }
+      return out;
+    }
+
+    function buildExercise(index) {
+      var complexity = document.getElementById('complexity').value;
+      var selectedSizes = getSelectedGroupSizes();
+      var rudiment = document.getElementById('rudiment').value;
+      var startRK = document.getElementById('startToggle').checked;
+      var ghost = document.getElementById('ghostToggle').checked;
+      var chop = document.getElementById('chopToggle').checked;
+      var grouping = chooseGrouping(selectedSizes, chop);
+      if (!grouping) return null;
+
+      var sticking = [];
+      var accents = [];
+      var nextStart = startRK ? 'R' : choice(['R', 'L']);
+      var groupRudiments = [];
+
+      grouping.forEach(function (size) {
+        var groupRudiment = chooseRudiment(size, rudiment);
+        var seq = patternForRudiment(size, groupRudiment, nextStart);
+        var groupAccents = accentsForGroup(size, groupRudiment, complexity);
+        groupRudiments.push(groupRudiment);
+        sticking = sticking.concat(seq);
+        accents = accents.concat(groupAccents);
+        nextStart = opposite(seq[seq.length - 1].toUpperCase());
+      });
+
+      sticking = applyGhosts(sticking, accents, complexity, ghost);
+      var orchestration = orchestrate(sticking, accents, chop, startRK);
+
+      return {
+        index: index,
+        grouping: grouping,
+        groupRudiments: groupRudiments,
+        sticking: sticking,
+        orchestration: orchestration,
+        accents: accents,
+        hh: makeHHRow(TOTAL_STEPS)
+      };
+    }
+
+    function makeHHRow(length) {
+      var row = [];
+      for (var i = 0; i < length; i += 1) row.push(i % 4 === 0 ? 'x' : '-');
+      return row;
+    }
+
+    function renderGroupedRow(tokens, grouping) {
+      var out = [];
+      var idx = 0;
+      grouping.forEach(function (size) {
+        out.push(tokens.slice(idx, idx + size).join(' '));
+        idx += size;
+      });
+      return out.join(' | ');
+    }
+
+    function accentRow(notes, accents) {
+      var row = [];
+      for (var i = 0; i < notes.length; i += 1) {
+        row.push(accents[i] ? '>' : '.');
+      }
+      return row;
+    }
+
+    function chartText(notes, accents, grouping) {
+      return renderGroupedRow(accentRow(notes, accents), grouping) + '\n' +
+        renderGroupedRow(makeHHRow(notes.length), grouping) + '\n' +
+        renderGroupedRow(notes, grouping);
     }
 
     function ensureAudio() {
       if (!audioCtx) {
-        const Ctx = window.AudioContext || window.webkitAudioContext;
+        var Ctx = window.AudioContext || window.webkitAudioContext;
         audioCtx = new Ctx();
       }
       if (audioCtx.state === 'suspended') {
@@ -578,10 +765,10 @@ R K | R L | L K | L R | R L K L R | L K L`
     }
 
     function stopPlayback() {
-      if (activeTimeout) {
-        clearTimeout(activeTimeout);
-        clearInterval(activeTimeout);
-        activeTimeout = null;
+      if (activeTimer) {
+        clearTimeout(activeTimer);
+        clearInterval(activeTimer);
+        activeTimer = null;
       }
       activeNodes.forEach(function (node) {
         try { if (node.stop) node.stop(); } catch (e) {}
@@ -595,15 +782,15 @@ R K | R L | L K | L R | R L K L R | L K L`
     }
 
     function parseChart(preEl) {
-      const lines = preEl.textContent.trim().split(String.fromCharCode(10));
+      var lines = preEl.textContent.trim().split(String.fromCharCode(10));
       return lines.map(function (line) {
         return line.split('|').join(' ').trim().split(' ').filter(Boolean);
       });
     }
 
     function playTone(ctx, freq, start, duration, gainValue, type) {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
       osc.type = type;
       osc.frequency.setValueAtTime(freq, start);
       gain.gain.setValueAtTime(gainValue, start);
@@ -616,8 +803,8 @@ R K | R L | L K | L R | R L K L R | L K L`
     }
 
     function playBuffer(ctx, buffer, start, gainValue, playbackRate) {
-      const src = ctx.createBufferSource();
-      const gain = ctx.createGain();
+      var src = ctx.createBufferSource();
+      var gain = ctx.createGain();
       src.buffer = buffer;
       src.playbackRate.value = playbackRate || 1;
       gain.gain.value = gainValue;
@@ -627,21 +814,28 @@ R K | R L | L K | L R | R L K L R | L K L`
       activeNodes.push(src, gain);
     }
 
-    function triggerStep(ctx, note, hat, accent, start) {
+    function triggerStep(ctx, note, hat, accent, start, clickOn, stepIndex) {
+      var upper = note.toUpperCase();
       if ((hat === 'x' || hat === 'X') && sampleBuffers.hihat) {
         playBuffer(ctx, sampleBuffers.hihat, start, 0.16, 1.0);
       } else if (hat === 'x' || hat === 'X') {
         playTone(ctx, 1400, start, 0.04, 0.035, 'square');
       }
 
-      if (note === 'K') {
+      if (clickOn && stepIndex % 4 === 0) {
+        if (sampleBuffers.hihat) playBuffer(ctx, sampleBuffers.hihat, start, 0.28, 1.18);
+        else playTone(ctx, 1800, start, 0.03, 0.06, 'square');
+      }
+
+      if (upper === 'K') {
         if (sampleBuffers.kick) playBuffer(ctx, sampleBuffers.kick, start, accent ? 1.0 : 0.82, 1.0);
         else playTone(ctx, accent ? 95 : 75, start, 0.12, accent ? 0.34 : 0.24, 'sine');
       }
 
-      if (note === 'R' || note === 'L') {
-        if (sampleBuffers.snare) playBuffer(ctx, sampleBuffers.snare, start, accent ? 0.95 : 0.72, accent ? 1.0 : 0.98);
-        else playTone(ctx, accent ? 210 : 180, start, 0.08, accent ? 0.17 : 0.1, 'triangle');
+      if (upper === 'R' || upper === 'L') {
+        var ghost = note === note.toLowerCase();
+        if (sampleBuffers.snare) playBuffer(ctx, sampleBuffers.snare, start, ghost ? 0.42 : (accent ? 0.95 : 0.72), ghost ? 0.985 : 1.0);
+        else playTone(ctx, accent ? 210 : 180, start, 0.08, ghost ? 0.06 : (accent ? 0.17 : 0.1), 'triangle');
       }
     }
 
@@ -651,20 +845,20 @@ R K | R L | L K | L R | R L K L R | L K L`
         return;
       }
 
-      const shell = button.parentElement && button.parentElement.nextElementSibling;
-      const preEl = shell ? shell.querySelector('pre') : null;
+      var shell = button.parentElement && button.parentElement.nextElementSibling;
+      var preEl = shell ? shell.querySelector('pre') : null;
       if (!preEl) return;
 
-      const rows = parseChart(preEl);
-      const accents = rows[0] || [];
-      const hats = rows[1] || [];
-      const notes = rows[2] || [];
-      const bpmInput = document.querySelector('.bpm-group input');
-      const bpm = parseInt(bpmInput ? bpmInput.value : '80', 10) || 80;
-      const stepMs = (60000 / bpm) / 4;
-      const shouldLoop = !!document.getElementById('loopToggle') && document.getElementById('loopToggle').checked;
-      const clickOn = !!document.getElementById('clickToggle') && document.getElementById('clickToggle').checked;
-      const cycleMs = notes.length * stepMs;
+      var rows = parseChart(preEl);
+      var accents = rows[0] || [];
+      var hats = rows[1] || [];
+      var notes = rows[2] || [];
+      var bpmInput = document.getElementById('bpm');
+      var bpm = parseInt(bpmInput ? bpmInput.value : '80', 10) || 80;
+      var stepMs = (60000 / bpm) / 4;
+      var shouldLoop = document.getElementById('loopToggle').checked;
+      var clickOn = document.getElementById('clickToggle').checked;
+      var cycleMs = notes.length * stepMs;
 
       stopPlayback();
       ensureAudio().then(function (ctx) {
@@ -672,75 +866,39 @@ R K | R L | L K | L R | R L K L R | L K L`
       }).then(function (ctx) {
         function scheduleCycle(startTime) {
           notes.forEach(function (note, i) {
-            const when = startTime + (i * stepMs) / 1000;
-            triggerStep(ctx, note, hats[i], accents[i] === '>', when);
-            if (clickOn && i % 4 === 0) {
-              if (sampleBuffers.hihat) playBuffer(ctx, sampleBuffers.hihat, when, 0.28, 1.18);
-              else playTone(ctx, 1800, when, 0.03, 0.06, 'square');
-            }
+            var when = startTime + (i * stepMs) / 1000;
+            triggerStep(ctx, note, hats[i], accents[i] === '>', when, clickOn, i);
           });
         }
 
         activeButton = button;
         activeButton.textContent = 'Stop';
 
-        const firstStart = ctx.currentTime + 0.04;
-        scheduleCycle(firstStart);
+        scheduleCycle(ctx.currentTime + 0.04);
 
         if (shouldLoop) {
-          activeTimeout = setInterval(function () {
+          activeTimer = setInterval(function () {
             if (activeButton !== button) return;
             scheduleCycle(ctx.currentTime + 0.04);
           }, cycleMs);
         } else {
-          activeTimeout = setTimeout(function () {
+          activeTimer = setTimeout(function () {
             stopPlayback();
           }, cycleMs + 140);
         }
       });
     }
 
-    function makeExercise(i) {
-      const ex = pickRandomExercise();
-      return `
-      <div class="exercise">
-        <h2>Exercise ${i} — ${ex.title}</h2>
-
-        <div class="chart-title">Sticking</div>
-        <div class="chart-actions">
-          <button type="button" class="play-btn">Play beat</button>
-        </div>
-        <div class="chart-shell">
-<pre>${ex.sticking}</pre>
-        </div>
-
-        <div class="chart-title">Orchestrating</div>
-        <div class="chart-actions">
-          <button type="button" class="play-btn">Play beat</button>
-        </div>
-        <div class="chart-shell">
-<pre>${ex.orchestration}</pre>
-        </div>
-      </div>`;
-    }
-
-    function generate() {
-      const count = parseInt(document.getElementById('count').value, 10);
-      const container = document.getElementById('results');
-      const scrollY = window.scrollY;
-
-      stopPlayback();
-      container.className = 'empty';
-      container.textContent = 'Generating...';
-
-      window.requestAnimationFrame(function () {
-        container.className = '';
-        container.innerHTML = '';
-        for (let i = 1; i <= count; i += 1) {
-          container.insertAdjacentHTML('beforeend', makeExercise(i));
-        }
-        window.scrollTo(0, scrollY);
-      });
+    function makeExerciseMarkup(ex) {
+      return '<div class="exercise">' +
+        '<h2>Exercise ' + ex.index + ' — ' + ex.grouping.join('|') + '</h2>' +
+        '<div class="chart-title">Sticking</div>' +
+        '<div class="chart-actions"><button type="button" class="play-btn">Play beat</button></div>' +
+        '<div class="chart-shell"><pre>' + chartText(ex.sticking, ex.accents, ex.grouping) + '</pre></div>' +
+        '<div class="chart-title">Orchestrating</div>' +
+        '<div class="chart-actions"><button type="button" class="play-btn">Play beat</button></div>' +
+        '<div class="chart-shell"><pre>' + chartText(ex.orchestration, ex.accents, ex.grouping) + '</pre></div>' +
+      '</div>';
     }
 
     function getSelectedGroupSizes() {
@@ -750,14 +908,49 @@ R K | R L | L K | L R | R L K L R | L K L`
     }
 
     function updateGroupSizesSummary() {
-      const values = getSelectedGroupSizes();
+      var values = getSelectedGroupSizes();
       document.getElementById('groupSizesSummary').textContent = values.length ? values.join(', ') : 'None selected';
     }
 
-    const groupSizesTrigger = document.getElementById('groupSizesTrigger');
-    const groupSizesMenu = document.getElementById('groupSizesMenu');
-    const selectAllGroupsBtn = document.getElementById('selectAllGroupsBtn');
-    const deselectAllGroupsBtn = document.getElementById('deselectAllGroupsBtn');
+    function generate() {
+      var count = parseInt(document.getElementById('count').value, 10);
+      var container = document.getElementById('results');
+      var scrollY = window.scrollY;
+      var selectedSizes = getSelectedGroupSizes();
+
+      if (!selectedSizes.length) {
+        container.className = 'empty';
+        container.textContent = 'Select at least one group size.';
+        return;
+      }
+
+      stopPlayback();
+      container.className = 'empty';
+      container.textContent = 'Generating...';
+      lastExercises = [];
+
+      window.requestAnimationFrame(function () {
+        container.className = '';
+        container.innerHTML = '';
+        for (var i = 1; i <= count; i += 1) {
+          var ex = buildExercise(i);
+          if (ex) {
+            lastExercises.push(ex);
+            container.insertAdjacentHTML('beforeend', makeExerciseMarkup(ex));
+          }
+        }
+        if (!lastExercises.length) {
+          container.className = 'empty';
+          container.textContent = 'No valid exercises for the current settings.';
+        }
+        window.scrollTo(0, scrollY);
+      });
+    }
+
+    var groupSizesTrigger = document.getElementById('groupSizesTrigger');
+    var groupSizesMenu = document.getElementById('groupSizesMenu');
+    var selectAllGroupsBtn = document.getElementById('selectAllGroupsBtn');
+    var deselectAllGroupsBtn = document.getElementById('deselectAllGroupsBtn');
 
     groupSizesTrigger.addEventListener('click', function (event) {
       event.stopPropagation();
@@ -779,7 +972,7 @@ R K | R L | L K | L R | R L K L R | L K L`
     });
 
     document.addEventListener('click', function (event) {
-      const playBtn = event.target.closest('.chart-actions button');
+      var playBtn = event.target.closest('.chart-actions button');
       if (playBtn) {
         playChart(playBtn);
         return;
@@ -792,7 +985,7 @@ R K | R L | L K | L R | R L K L R | L K L`
     updateGroupSizesSummary();
     document.getElementById('generateBtn').addEventListener('click', generate);
     document.getElementById('copyJsonBtn').addEventListener('click', function () {
-      navigator.clipboard.writeText(JSON.stringify({
+      var payload = {
         count: document.getElementById('count').value,
         complexity: document.getElementById('complexity').value,
         groupSizes: getSelectedGroupSizes(),
@@ -802,8 +995,10 @@ R K | R L | L K | L R | R L K L R | L K L`
         chop: document.getElementById('chopToggle').checked,
         bpm: document.getElementById('bpm').value,
         click: document.getElementById('clickToggle').checked,
-        loop: document.getElementById('loopToggle').checked
-      }, null, 2));
+        loop: document.getElementById('loopToggle').checked,
+        exercises: lastExercises
+      };
+      navigator.clipboard.writeText(JSON.stringify(payload, null, 2));
     });
   </script>
 </body>
