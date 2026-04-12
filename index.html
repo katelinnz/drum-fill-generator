@@ -256,40 +256,6 @@
       pre { font-size: 24px; padding: 16px 18px; }
     }
 
-    @media (max-width: 640px) {
-      .controls {
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-        padding: 14px;
-      }
-
-      .settings-block,
-      .playback-block,
-      .actions-block,
-      .bpm-group {
-        grid-column: 1 / -1;
-      }
-
-      .control label,
-      .bpm-group label {
-        font-size: 11px;
-      }
-
-      .playback-block { padding-bottom: 0; }
-      .actions-block { gap: 12px; }
-      .exercise h2 { font-size: 28px; }
-      pre { font-size: 18px; }
-    }
-      .settings-block,
-      .playback-block,
-      .actions-block,
-      .bpm-group { grid-column: 1 / -1; }
-      .playback-block { padding-bottom: 0; }
-      .actions-block { gap: 12px; }
-      .exercise h2 { font-size: 28px; }
-      pre { font-size: 18px; }
-    }
-
     @media (max-width: 640px) and (orientation: portrait) {
       .wrap {
         padding: 10px 12px 24px;
@@ -342,6 +308,7 @@
       }
 
       .exercise { padding: 14px; }
+      .exercise h2 { font-size: 28px; }
       .chart-title { font-size: 24px; }
       .chart-actions button {
         min-width: 122px;
@@ -351,20 +318,6 @@
       .chart-shell {
         overflow-x: auto;
         overflow-y: hidden;
-      }
-      pre {
-        width: max-content;
-        min-width: 100%;
-        font-size: 15px;
-        line-height: 1.55;
-        padding: 14px 16px;
-      }
-    }
-      .chart-title { font-size: 24px; }
-      .chart-actions button {
-        min-width: 122px;
-        font-size: 18px;
-        padding: 12px 18px;
       }
       pre {
         width: max-content;
@@ -428,7 +381,7 @@
   <div class="wrap">
     <div class="header">
       <h1>Drum Fill Generator</h1>
-      <div class="version">v1.12</div>
+      <div class="version">v1.13</div>
     </div>
 
     <div class="controls">
