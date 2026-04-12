@@ -378,7 +378,7 @@
   <div class="wrap">
     <div class="header">
       <h1>Drum Fill Generator</h1>
-      <div class="version">v1.8</div>
+      <div class="version">v1.10</div>
     </div>
 
     <div class="controls">
@@ -528,6 +528,8 @@ R K | R L | L K | L R | R L K L R | L K L`
       const count = parseInt(document.getElementById('count').value, 10);
       const container = document.getElementById('results');
 
+      const scrollY = window.scrollY;
+
       container.className = 'empty';
       container.textContent = 'Generating...';
 
@@ -538,6 +540,8 @@ R K | R L | L K | L R | R L K L R | L K L`
         for (let i = 1; i <= count; i += 1) {
           container.insertAdjacentHTML('beforeend', makeExercise(i));
         }
+
+        window.scrollTo(0, scrollY);
       });
     }
 
