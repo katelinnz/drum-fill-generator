@@ -68,6 +68,7 @@
       border-radius: 22px;
       padding: 18px 22px 20px;
       margin-bottom: 28px;
+      align-items: start;
     }
 
     .control,
@@ -256,7 +257,29 @@
     }
 
     @media (max-width: 640px) {
-      .controls { grid-template-columns: 1fr 1fr; }
+      .controls {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        padding: 14px;
+      }
+
+      .settings-block,
+      .playback-block,
+      .actions-block,
+      .bpm-group {
+        grid-column: 1 / -1;
+      }
+
+      .control label,
+      .bpm-group label {
+        font-size: 11px;
+      }
+
+      .playback-block { padding-bottom: 0; }
+      .actions-block { gap: 12px; }
+      .exercise h2 { font-size: 28px; }
+      pre { font-size: 18px; }
+    }
       .settings-block,
       .playback-block,
       .actions-block,
@@ -268,7 +291,67 @@
     }
 
     @media (max-width: 640px) and (orientation: portrait) {
+      .wrap {
+        padding: 10px 12px 24px;
+      }
+
+      .header {
+        align-items: center;
+      }
+
+      .controls {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        padding: 14px;
+      }
+
+      select,
+      input[type="number"],
+      button {
+        min-height: 48px;
+        padding: 0 14px;
+      }
+
+      select,
+      input[type="number"] {
+        font-size: 16px;
+      }
+
+      .settings-block {
+        gap: 14px 18px;
+      }
+
+      .settings-check {
+        font-size: 14px;
+      }
+
+      .actions-block {
+        gap: 10px;
+      }
+
+      .actions-block button {
+        font-size: 18px;
+      }
+
       .exercise { padding: 14px; }
+      .chart-title { font-size: 24px; }
+      .chart-actions button {
+        min-width: 122px;
+        font-size: 18px;
+        padding: 12px 18px;
+      }
+      .chart-shell {
+        overflow-x: auto;
+        overflow-y: hidden;
+      }
+      pre {
+        width: max-content;
+        min-width: 100%;
+        font-size: 15px;
+        line-height: 1.55;
+        padding: 14px 16px;
+      }
+    }
       .chart-title { font-size: 24px; }
       .chart-actions button {
         min-width: 122px;
@@ -331,54 +414,13 @@
         padding: 16px 18px;
       }
     }
-      .header { margin-bottom: 10px; }
-      .controls {
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 10px 12px;
-        padding: 12px;
-        margin-bottom: 14px;
-      }
-      label, .settings-check { font-size: 11px; }
-      select, input[type="number"], button {
-        min-height: 42px;
-        padding: 0 12px;
-      }
-      select, input[type="number"], button, .chart-actions button { font-size: 14px; }
-      .settings-block, .playback-block { gap: 10px 14px; }
-      .actions-block { gap: 10px; }
-      .exercise {
-        padding: 12px;
-        margin-bottom: 14px;
-      }
-      .exercise h2 {
-        margin-bottom: 10px;
-        font-size: 22px;
-      }
-      .chart-title {
-        margin: 12px 0 8px;
-        font-size: 18px;
-      }
-      .chart-actions { margin-bottom: 8px; }
-      .chart-actions button {
-        min-width: 108px;
-        padding: 8px 14px;
-      }
-      .chart-shell { overflow-x: hidden; }
-      pre {
-        width: 100%;
-        min-width: 0;
-        font-size: clamp(11px, 1.45vw, 16px);
-        line-height: 1.4;
-        padding: 14px 16px;
-      }
-    }
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="header">
       <h1>Drum Fill Generator</h1>
-      <div class="version">v1.10</div>
+      <div class="version">v1.11</div>
     </div>
 
     <div class="controls">
@@ -388,6 +430,7 @@
           <option value="1">1</option>
           <option value="3">3</option>
           <option value="5" selected>5</option>
+          <option value="10">10</option>
         </select>
       </div>
 
@@ -402,7 +445,11 @@
       <div class="control">
         <label>Group sizes</label>
         <select id="groupSizes">
-          <option value="2 | 3 | 4 | 5 | 2" selected>2, 3, 4, 5</option>
+          <option value="2,3,4,5" selected>2, 3, 4, 5</option>
+          <option value="2,3,4">2, 3, 4</option>
+          <option value="2,3,5">2, 3, 5</option>
+          <option value="2,4,5">2, 4, 5</option>
+          <option value="3,4,5">3, 4, 5</option>
         </select>
       </div>
 
@@ -410,6 +457,11 @@
         <label>Rudiment</label>
         <select id="rudiment">
           <option value="random" selected>Random mix</option>
+          <option value="single">Single stroke</option>
+          <option value="double">Double stroke</option>
+          <option value="inverted-double">Inverted double stroke</option>
+          <option value="paradiddle">Paradiddle</option>
+          <option value="roll">Roll</option>
         </select>
       </div>
 
