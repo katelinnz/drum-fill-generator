@@ -24,14 +24,20 @@
       background: var(--bg);
       color: var(--text);
     }
+
+    select {
+      color: var(--text);
+    }
+
     .wrap {
       max-width: 1100px;
       margin: 0 auto;
-      padding: 24px;
+      padding: 20px;
     }
+
     h1 {
       margin: 0 0 16px;
-      font-size: 28px;
+      font-size: 26px;
       font-weight: 700;
     }
 
@@ -43,22 +49,23 @@
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 16px;
-      margin-bottom: 24px;
-      align-items: start;
+      margin-bottom: 20px;
     }
+
     .control {
       display: flex;
       flex-direction: column;
       gap: 6px;
-      min-width: 0;
       position: relative;
     }
+
     label {
       font-size: 12px;
       color: var(--muted);
       font-weight: 600;
     }
-    select, input[type="number"], button {
+
+    select, input, button {
       border-radius: 8px;
       border: 1px solid var(--border);
       background: var(--panel-2);
@@ -66,155 +73,149 @@
       padding: 9px 10px;
       font: inherit;
     }
-    button {
-      cursor: pointer;
-      font-weight: 600;
-    }
-    button:hover { border-color: var(--accent); }
-    #generateBtn {
-      background: #1f2933;
-      border-color: #374151;
-      color: #e6e6e6;
-    }
-    #generateBtn:hover {
-      background: #2a313a;
-      border-color: #4b5563;
-    }
-    #copyJsonBtn { background: #0b1220; }
 
-    .multi-select-trigger {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      text-align: left;
-      min-height: 42px;
+    button { cursor: pointer; }
+
+    #generateBtn {
+      background: #2d3748;
     }
-    .multi-select-menu {
-      position: absolute;
-      top: calc(100% + 6px);
-      left: 0;
-      right: 0;
-      z-index: 20;
-      background: var(--panel-2);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 10px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
-    }
-    .hidden { display: none; }
-    .menu-actions {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 10px;
-    }
-    .menu-actions button {
-      flex: 1;
-      padding: 7px 8px;
-      font-size: 13px;
-    }
-    .group-option {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 2px;
-      color: var(--text);
-      font-size: 14px;
-    }
-    .group-option input { margin: 0; }
 
     .settings-row {
       display: flex;
-      gap: 16px;
+      gap: 14px;
       align-items: center;
       flex-wrap: wrap;
     }
-    .playback-row {
-      align-self: end;
-      min-height: 42px;
-      padding-bottom: 1px;
-    }
-    .settings-check {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      color: var(--muted);
-      font-size: 14px;
-    }
-    .settings-check input { margin: 0; }
+
     .bpm-group {
       display: flex;
       flex-direction: column;
       gap: 6px;
-      align-self: flex-end;
     }
+
     .actions-row {
       grid-column: span 4;
       display: flex;
-      gap: 12px;
-      margin-top: 4px;
+      gap: 10px;
     }
-    .actions-row button { flex: 1; }
 
     .exercise {
       background: var(--panel);
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 18px;
+      padding: 18px;
+      margin-bottom: 16px;
     }
+
     .exercise h2 {
       margin: 0 0 10px;
       font-size: 18px;
-      font-weight: 700;
     }
+
     .chart-title {
-      font-weight: 700;
-      margin: 16px 0 8px;
+      margin: 14px 0 6px;
       color: #4ade80;
+      font-weight: 700;
     }
+
     .chart-actions {
       margin-bottom: 6px;
-      display: flex;
-      gap: 8px;
     }
-    .chart-actions button {
-      font-size: 13px;
-      padding: 6px 10px;
-      width: auto;
-      min-width: 110px;
-    }
-    .play-toggle-btn[data-playing="true"] {
-      background: var(--accent-2);
-      border-color: var(--accent-2);
-      color: #04130b;
-    }
+
     pre {
       margin: 0;
       border-radius: 8px;
       padding: 10px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-family: monospace;
       background: var(--code);
-      color: var(--text);
       border: 1px solid var(--border);
       overflow-x: auto;
-      line-height: 1.7;
-    }
-    .empty {
-      text-align: center;
-      padding: 30px;
-      border: 1px dashed var(--border);
-      border-radius: 12px;
-      color: var(--muted);
+      line-height: 1.6;
     }
 
-    @media (max-width: 800px) {
-      .controls { grid-template-columns: 1fr 1fr; }
-      .actions-row { grid-column: span 2; }
+    /* MOBILE IMPROVEMENTS */
+    @media (max-width: 600px) {
+      .controls {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .actions-row {
+        grid-column: span 2;
+      }
+
+      /* PORTRAIT: allow scroll */
+      pre {
+        font-size: 12px;
+        white-space: nowrap;
+        overflow-x: auto;
+      }
+
+      .exercise {
+        padding: 14px;
+      }
     }
-    @media (max-width: 500px) {
-      .controls { grid-template-columns: 1fr; }
-      .actions-row { grid-column: span 1; }
+
+    /* LANDSCAPE MOBILE: fit full phrase */
+    @media (max-width: 900px) and (orientation: landscape) {
+      .wrap {
+        padding: 10px;
+      }
+
+      .controls {
+        display: none; /* focus on playing */
+      }
+
+      pre {
+        font-size: 2.8vw; /* scale to screen width */
+        white-space: nowrap;
+        overflow: hidden;
+      }
+
+      .exercise {
+        padding: 10px;
+      }
+
+      .exercise h2 {
+        font-size: 16px;
+      }
+    }
+
+      .actions-row {
+        grid-column: span 2;
+      }
+
+      pre {
+        font-size: 12px; /* smaller so full phrase fits */
+        white-space: pre-wrap; /* allow wrapping */
+        word-break: break-word;
+      }
+
+      .exercise {
+        padding: 14px;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .controls {
+        grid-template-columns: 1fr;
+      }
+
+      .actions-row {
+        grid-column: span 1;
+      }
+
+      pre {
+        font-size: 11px;
+      }
+    }
+
+      .actions-row {
+        grid-column: span 1;
+      }
+
+      pre {
+        font-size: 11px;
+      }
     }
   </style>
 </head>
@@ -224,773 +225,82 @@
 
     <div class="controls">
       <div class="control">
-        <label for="count">Exercises</label>
+        <label>Exercises</label>
         <select id="count">
-          <option value="1">1</option>
-          <option value="3">3</option>
-          <option value="5" selected>5</option>
-          <option value="10">10</option>
+          <option>1</option>
+          <option>3</option>
+          <option selected>5</option>
         </select>
       </div>
 
       <div class="control">
-        <label for="complexity">Complexity</label>
+        <label>Complexity</label>
         <select id="complexity">
-          <option value="easy">Easy</option>
-          <option value="intermediate" selected>Intermediate</option>
+          <option>Easy</option>
+          <option selected>Intermediate</option>
         </select>
       </div>
 
       <div class="control">
         <label>Group sizes</label>
-        <button type="button" id="groupSizesTrigger" class="multi-select-trigger">
-          <span id="groupSizesSummary">2, 3, 4, 5</span>
-          <span>▾</span>
-        </button>
-        <div id="groupSizesMenu" class="multi-select-menu hidden">
-          <div class="menu-actions">
-            <button type="button" id="selectAllGroupsBtn">Select all</button>
-            <button type="button" id="deselectAllGroupsBtn">Deselect all</button>
-          </div>
-          <label class="group-option"><input type="checkbox" class="group-size-option" value="2" checked /> 2</label>
-          <label class="group-option"><input type="checkbox" class="group-size-option" value="3" checked /> 3</label>
-          <label class="group-option"><input type="checkbox" class="group-size-option" value="4" checked /> 4</label>
-          <label class="group-option"><input type="checkbox" class="group-size-option" value="5" checked /> 5</label>
-          <label class="group-option"><input type="checkbox" class="group-size-option" value="6" /> 6</label>
-          <label class="group-option"><input type="checkbox" class="group-size-option" value="7" /> 7</label>
-        </div>
+        <select>
+          <option>2, 3, 4, 5</option>
+        </select>
       </div>
 
       <div class="control">
-        <label for="rudimentBasis">Rudiment</label>
-        <select id="rudimentBasis">
-          <option value="random" selected>Random mix</option>
-          <option value="single">Single stroke</option>
-          <option value="double">Double stroke</option>
-          <option value="inverted-double">Inverted double stroke</option>
-          <option value="paradiddle">Paradiddle</option>
-          <option value="roll">Roll</option>
+        <label>Rudiment</label>
+        <select>
+          <option>Random mix</option>
         </select>
       </div>
 
       <div class="settings-row">
-        <label class="settings-check"><input type="checkbox" id="forceRightStart" checked> Start R/K</label>
-        <label class="settings-check"><input type="checkbox" id="ghostMode"> Ghost</label>
-        <label class="settings-check"><input type="checkbox" id="chopMode"> Chop</label>
+        <label><input type="checkbox" checked> Start R/K</label>
+        <label><input type="checkbox"> Ghost</label>
+        <label><input type="checkbox"> Chop</label>
       </div>
 
       <div class="bpm-group">
-        <label for="bpm">BPM</label>
-        <input id="bpm" type="number" value="80" min="30" max="260">
+        <label>BPM</label>
+        <input type="number" value="80">
       </div>
 
-      <div class="settings-row playback-row">
-        <label class="settings-check"><input type="checkbox" id="metronomeClick"> Click</label>
-        <label class="settings-check"><input type="checkbox" id="loopPlayback"> Loop</label>
+      <div class="settings-row">
+        <label><input type="checkbox"> Click</label>
+        <label><input type="checkbox"> Loop</label>
       </div>
 
       <div class="actions-row">
-        <button id="generateBtn" type="button">Generate</button>
-        <button id="copyJsonBtn" type="button">Copy JSON</button>
+        <button id="generateBtn">Generate</button>
+        <button>Copy JSON</button>
       </div>
     </div>
 
-    <div id="output" class="empty">Press Generate.</div>
+    <div class="exercise">
+      <h2>Exercise 1 — 2 | 3 | 4 | 5 | 2</h2>
+
+      <div class="chart-title">Sticking</div>
+      <div class="chart-actions">
+        <button>Play beat</button>
+      </div>
+      <pre>
+> . | > . . | > . . > | > .
+x - | - - x | - - - x | -
+R L | R L R | L R L L | R
+      </pre>
+
+      <div class="chart-title">Orchestrating</div>
+      <div class="chart-actions">
+        <button>Play beat</button>
+      </div>
+      <pre>
+> . | > . . | > . . > | > .
+x - | - - x | - - - x | -
+R L | R L K | L K L L | R
+      </pre>
+    </div>
+
   </div>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const HH = Array(16).fill('-');
-      HH[0] = 'x'; HH[4] = 'x'; HH[8] = 'x'; HH[12] = 'x';
-
-      const CELL_LIBRARY = {
-        2: [
-          { sticking: ['R','L'], accents: [1,0], weight: 6, basis: 'single' },
-          { sticking: ['L','R'], accents: [1,0], weight: 4, basis: 'single' },
-          { sticking: ['R','R'], accents: [1,0], weight: 3, basis: 'double' },
-          { sticking: ['L','L'], accents: [1,0], weight: 3, basis: 'double' }
-        ],
-        3: [
-          { sticking: ['R','L','R'], accents: [1,0,0], weight: 7, basis: 'single' },
-          { sticking: ['L','R','L'], accents: [1,0,0], weight: 5, basis: 'single' },
-          { sticking: ['R','R','L'], accents: [1,0,0], weight: 2, basis: 'single' },
-          { sticking: ['L','L','R'], accents: [1,0,0], weight: 2, basis: 'single' }
-        ],
-        4: [
-          { sticking: ['R','L','R','R'], accents: [1,0,0,0], weight: 7, basis: 'paradiddle' },
-          { sticking: ['L','R','L','L'], accents: [1,0,0,0], weight: 6, basis: 'paradiddle' },
-          { sticking: ['R','L','R','L'], accents: [1,0,0,0], weight: 5, basis: 'single' },
-          { sticking: ['R','R','L','L'], accents: [1,0,0,0], weight: 5, basis: 'double' },
-          { sticking: ['R','L','L','R'], accents: [1,0,0,0], weight: 6, basis: 'inverted-double' },
-          { sticking: ['L','R','R','L'], accents: [1,0,0,0], weight: 5, basis: 'inverted-double' }
-        ],
-        5: [
-          { sticking: ['R','R','L','L','R'], accents: [1,0,0,0,0], weight: 7, basis: 'roll' },
-          { sticking: ['L','L','R','R','L'], accents: [1,0,0,0,0], weight: 6, basis: 'roll' },
-          { sticking: ['R','L','R','L','R'], accents: [1,0,0,0,0], weight: 5, basis: 'single' },
-          { sticking: ['R','L','R','R','L'], accents: [1,0,0,0,0], weight: 4, basis: 'paradiddle' }
-        ],
-        6: [
-          { sticking: ['R','L','R','L','R','L'], accents: [1,0,0,1,0,0], weight: 5, basis: 'single' },
-          { sticking: ['R','L','L','R','R','L'], accents: [1,0,0,1,0,0], weight: 6, basis: 'roll' },
-          { sticking: ['R','L','R','R','L','L'], accents: [1,0,0,1,0,0], weight: 6, basis: 'paradiddle' }
-        ],
-        7: [
-          { sticking: ['R','L','R','L','R','L','R'], accents: [1,0,0,1,0,0,0], weight: 4, basis: 'single' },
-          { sticking: ['R','R','L','L','R','R','L'], accents: [1,0,0,0,1,0,0], weight: 6, basis: 'roll' }
-        ]
-      };
-
-      let lastExercises = [];
-      let audioContext = null;
-      let activeNodes = [];
-      let scheduledTimeouts = [];
-      let isPlaying = false;
-      let currentPlaybackExerciseNumber = null;
-      let currentPlaybackVersion = null;
-      let nextLoopStartTime = null;
-
-      const els = {
-        output: document.getElementById('output'),
-        count: document.getElementById('count'),
-        complexity: document.getElementById('complexity'),
-        chopMode: document.getElementById('chopMode'),
-        forceRightStart: document.getElementById('forceRightStart'),
-        ghostMode: document.getElementById('ghostMode'),
-        rudimentBasis: document.getElementById('rudimentBasis'),
-        bpm: document.getElementById('bpm'),
-        loopPlayback: document.getElementById('loopPlayback'),
-        metronomeClick: document.getElementById('metronomeClick'),
-        copyJsonBtn: document.getElementById('copyJsonBtn'),
-        generateBtn: document.getElementById('generateBtn'),
-        groupSizesTrigger: document.getElementById('groupSizesTrigger'),
-        groupSizesMenu: document.getElementById('groupSizesMenu'),
-        groupSizesSummary: document.getElementById('groupSizesSummary'),
-        selectAllGroupsBtn: document.getElementById('selectAllGroupsBtn'),
-        deselectAllGroupsBtn: document.getElementById('deselectAllGroupsBtn')
-      };
-
-      function randInt(n) { return Math.floor(Math.random() * n); }
-      function chooseWeighted(items) {
-        const total = items.reduce((sum, item) => sum + item.weight, 0);
-        let roll = Math.random() * total;
-        for (const item of items) {
-          roll -= item.weight;
-          if (roll <= 0) return item;
-        }
-        return items[items.length - 1];
-      }
-
-      function getSelectedGroupSizes() {
-        return Array.from(document.querySelectorAll('.group-size-option:checked')).map(el => Number(el.value)).sort((a,b) => a-b);
-      }
-      function updateGroupSizesSummary() {
-        const sizes = getSelectedGroupSizes();
-        els.groupSizesSummary.textContent = sizes.length ? sizes.join(', ') : 'None selected';
-      }
-      function setAllGroupSizes(checked) {
-        document.querySelectorAll('.group-size-option').forEach(el => { el.checked = checked; });
-        updateGroupSizesSummary();
-      }
-
-      function compositions(total, allowed) {
-        const out = [];
-        function walk(rem, path) {
-          if (rem === 0) { out.push(path); return; }
-          for (const n of allowed) {
-            if (rem - n < 0) continue;
-            walk(rem - n, [...path, n]);
-          }
-        }
-        walk(total, []);
-        return out;
-      }
-
-      function groupingScore(grouping, chopMode) {
-        let score = 0;
-        if (chopMode) {
-          if (grouping.length >= 5) score += 5;
-        } else {
-          if (grouping.length <= 5) score += 6;
-          else if (grouping.length > 6) score -= 6;
-        }
-        const uniqueCount = new Set(grouping).size;
-        if (uniqueCount === 2) score += 5;
-        if (uniqueCount >= 4) score -= 3;
-        for (let i = 1; i < grouping.length; i++) if (grouping[i] === grouping[i - 1]) score += 2;
-        return score;
-      }
-
-      function generateGrouping(allowedGroupSizes, chopMode) {
-        let all = compositions(16, allowedGroupSizes);
-        if (!all.length) throw new Error('No valid 16-note groupings can be made from the selected group sizes.');
-        if (!chopMode) {
-          const preferred = all.filter(g => g.length <= 5);
-          if (preferred.length) all = preferred;
-        }
-        const scored = all.map(g => ({ g, weight: Math.max(1, groupingScore(g, chopMode)) }));
-        return chooseWeighted(scored).g;
-      }
-
-      function choosePrimaryBasis(requestedBasis, grouping, complexity) {
-        if (requestedBasis !== 'random') return requestedBasis;
-        const available = new Set();
-        grouping.forEach(size => (CELL_LIBRARY[size] || []).forEach(cell => available.add(cell.basis)));
-        const bag = [];
-        const add = (basis, count) => { if (available.has(basis)) for (let i=0;i<count;i++) bag.push(basis); };
-        if (complexity === 'easy') {
-          add('single', 8); add('double', 5); add('inverted-double', 3); add('paradiddle', 2); add('roll', 1);
-        } else {
-          add('single', 4); add('double', 3); add('inverted-double', 3); add('paradiddle', 4); add('roll', 3);
-        }
-        return bag.length ? bag[randInt(bag.length)] : 'single';
-      }
-
-      function applyDownbeatAwareness(accents) {
-        const out = [...accents];
-        if (!out[0]) out[0] = Math.random() < 0.6;
-        if (!out[8]) out[8] = Math.random() < 0.5;
-        if (!out[4] && Math.random() < 0.35) out[4] = true;
-        if (!out[12] && Math.random() < 0.4) out[12] = true;
-        return out;
-      }
-
-      function applyPhraseResolution(sticking, accents, complexity) {
-        const s = [...sticking];
-        const a = [...accents];
-        const endings = complexity === 'easy'
-          ? [
-              { sticking: ['R','L'], accents: [false,false] },
-              { sticking: ['R','L','R','L'], accents: [false,false,true,false] }
-            ]
-          : [
-              { sticking: ['R','L'], accents: [false,false] },
-              { sticking: ['R','L','R','L'], accents: [false,false,true,false] },
-              { sticking: ['R','L','R','R'], accents: [false,false,true,false] }
-            ];
-        const choice = endings[randInt(endings.length)];
-        const start = 16 - choice.sticking.length;
-        for (let i = 0; i < choice.sticking.length; i++) {
-          s[start + i] = choice.sticking[i];
-          a[start + i] = choice.accents[i];
-        }
-        return { sticking: s, accents: a };
-      }
-
-      function applyGhostNotes(sticking, accents, grouping, complexity, ghostMode) {
-        const ghosts = Array(16).fill(false);
-        if (!ghostMode) return ghosts;
-        let cursor = 0;
-        grouping.forEach(size => {
-          const start = cursor;
-          const end = cursor + size - 1;
-          for (let i = start + 1; i < end; i++) {
-            if (!accents[i] && sticking[i] === 'L') ghosts[i] = true;
-          }
-          if (complexity === 'easy') {
-            for (let i = start + 1; i < end; i++) {
-              if (sticking[i] === sticking[i + 1] && !accents[i] && !accents[i + 1]) {
-                ghosts[i] = true;
-                ghosts[i + 1] = true;
-              }
-            }
-          }
-          cursor += size;
-        });
-        return ghosts;
-      }
-
-      function buildSticking(grouping, complexity, requestedBasis, forceRightStart) {
-        function createsTripleRun(current, next) {
-          if (!current.length) return false;
-          let run = 1;
-          for (let i = current.length - 1; i > 0; i--) {
-            if (current[i] === current[i - 1]) run++;
-            else break;
-          }
-          let last = current[current.length - 1];
-          let tempRun = run;
-          for (const n of next.sticking) {
-            if (n === last) tempRun++;
-            else tempRun = 1;
-            last = n;
-            if (tempRun >= 3) return true;
-          }
-          return false;
-        }
-
-        const sticking = [];
-        const accents = [];
-        const primaryBasis = choosePrimaryBasis(requestedBasis, grouping, complexity);
-        let lastCell = null;
-        let repeatingMotif = null;
-
-        grouping.forEach((size, index) => {
-          const originalChoices = CELL_LIBRARY[size] || [];
-          let choices = [...originalChoices];
-
-          if (complexity === 'easy') {
-            const filtered = choices.filter(c => c.accents.filter(Boolean).length <= 1);
-            if (filtered.length) choices = filtered;
-          } else {
-            const filtered = choices.filter(c => !(size >= 4 && c.accents.filter(Boolean).length > 1));
-            if (filtered.length) choices = filtered;
-          }
-
-          const hasPrimaryBasis = choices.some(c => c.basis === primaryBasis);
-          const sameSizeRepeated = index > 0 && grouping[index] === grouping[index - 1];
-
-          const weightedChoices = choices.map(c => {
-            let weight = c.weight;
-            if (c.basis === primaryBasis) weight += hasPrimaryBasis ? (complexity === 'easy' ? 8 : 10) : 2;
-            else if (hasPrimaryBasis) weight -= complexity === 'easy' ? 4 : 3;
-            else weight += 1;
-
-            if (lastCell) {
-              if (sameSizeRepeated) {
-                if (complexity === 'easy') {
-                  if (JSON.stringify(c.sticking) === JSON.stringify(lastCell.sticking)) weight += 8;
-                  if (c.basis === lastCell.basis) weight += 3;
-                } else {
-                  if (c.basis === lastCell.basis) weight += 3;
-                  if (c.sticking[0] !== lastCell.sticking[0]) weight += 2;
-                }
-              }
-              if (c.basis === lastCell.basis) weight += 4;
-              const prevHand = sticking[sticking.length - 1];
-              if (prevHand && c.sticking[0] !== prevHand) weight += 1;
-            }
-
-            if (complexity === 'easy' && repeatingMotif && size === repeatingMotif.size && JSON.stringify(c.sticking) === JSON.stringify(repeatingMotif.sticking)) {
-              weight += 6;
-            }
-
-            if (index === 0 && forceRightStart && c.sticking[0] !== 'R') weight = 0;
-            if (createsTripleRun(sticking, c)) weight = 0;
-            return { ...c, weight: Math.max(0, weight) };
-          }).filter(c => c.weight > 0);
-
-          let pool = weightedChoices.length ? weightedChoices : choices.filter(c => !forceRightStart || index > 0 || c.sticking[0] === 'R');
-          if (!pool.length) pool = originalChoices.filter(c => !forceRightStart || index > 0 || c.sticking[0] === 'R');
-          if (!pool.length) throw new Error(`No sticking cells available for group size ${size} with current settings.`);
-
-          const cell = chooseWeighted(pool.map(c => ({ ...c, weight: Math.max(1, c.weight || 1) })));
-          sticking.push(...cell.sticking);
-          accents.push(...cell.accents.map(Boolean));
-
-          if (complexity === 'easy' && !repeatingMotif && index < grouping.length - 1 && grouping.slice(index + 1).includes(size)) {
-            repeatingMotif = { size, sticking: cell.sticking };
-          }
-          lastCell = cell;
-        });
-
-        return { sticking, accents };
-      }
-
-      function orchestrate(sticking, accents, grouping, complexity, forceRightStart) {
-        const orchestration = [...sticking];
-        const candidates = [];
-        for (let i = 0; i < sticking.length; i++) if (!accents[i]) candidates.push(i);
-
-        const groups = [];
-        let cursor = 0;
-        grouping.forEach(size => { groups.push({ start: cursor, end: cursor + size - 1, size }); cursor += size; });
-
-        const minKicks = complexity === 'intermediate' ? 3 : 2;
-        const maxKicks = complexity === 'intermediate' ? 5 : 4;
-        const targetKickCount = Math.min(maxKicks, Math.max(minKicks, Math.round(candidates.length * (complexity === 'intermediate' ? 0.34 : 0.24))));
-
-        function canPlaceKick(index) {
-          if (accents[index]) return false;
-          if (orchestration[index] === 'K') return false;
-          const prev = orchestration[index - 1];
-          const prev2 = orchestration[index - 2];
-          const next = orchestration[index + 1];
-          if (prev === 'K' && prev2 === 'K') return false;
-          if (prev === 'K' && next === 'K') return false;
-          return true;
-        }
-
-        function placementScore(index) {
-          let score = 0;
-          if (index % 4 === 2) score += 4;
-          if (index % 4 === 1 || index % 4 === 3) score += 3;
-          if (index % 4 === 0) score += 1;
-          if (accents[index - 1] || accents[index + 1]) score += 2;
-          if (accents[index + 1]) score -= 2;
-          const group = groups.find(g => index >= g.start && index <= g.end);
-          if (group) {
-            const offset = index - group.start;
-            if (offset > 0 && offset < group.size - 1) score += 2;
-            if (group.size >= 5 && offset >= 2) score += 1;
-          }
-          if (orchestration[index - 1] === 'K') score -= 3;
-          if (index === 0 && forceRightStart) score += 5;
-          return score;
-        }
-
-        function placeKick(index) {
-          if (!canPlaceKick(index)) return false;
-          orchestration[index] = 'K';
-          return true;
-        }
-
-        if (forceRightStart && !accents[0] && Math.random() < (complexity === 'easy' ? 0.4 : 0.65)) placeKick(0);
-
-        groups.forEach(group => {
-          const groupCandidates = [];
-          for (let i = group.start; i <= group.end; i++) if (!accents[i]) groupCandidates.push(i);
-          const shouldForceKick = complexity === 'easy'
-            ? group.size >= 5 || (group.size >= 3 && Math.random() < 0.3)
-            : group.size >= 4 || (group.size >= 3 && Math.random() < 0.55);
-          if (!shouldForceKick || !groupCandidates.length) return;
-          const ranked = groupCandidates.map(i => ({ i, score: placementScore(i) })).sort((a,b) => b.score - a.score);
-          placeKick(ranked[0].i);
-        });
-
-        let currentKickCount = orchestration.filter(n => n === 'K').length;
-        const rankedCandidates = candidates.map(i => ({ i, score: placementScore(i) + Math.random() * 0.75 })).sort((a,b) => b.score - a.score);
-        for (const c of rankedCandidates) {
-          if (currentKickCount >= targetKickCount) break;
-          if (placeKick(c.i)) currentKickCount += 1;
-        }
-        return orchestration;
-      }
-
-      function validateExercise(ex) {
-        const errors = [];
-        if (ex.grouping.reduce((a,b) => a + b, 0) !== 16) errors.push('Grouping does not total 16.');
-        if (ex.sticking.length !== 16 || ex.orchestration.length !== 16 || ex.accents.length !== 16) errors.push('One or more rows do not have 16 slots.');
-        if (ex.forceRightStart && ex.sticking[0] !== 'R') errors.push('Fill does not start with right hand.');
-        let kickRun = 0;
-        for (let i = 0; i < 16; i++) {
-          const s = ex.sticking[i], o = ex.orchestration[i], a = ex.accents[i];
-          if (a && o === 'K') errors.push(`Accent placed on K at slot ${i + 1}.`);
-          if (s === 'R' && !(o === 'R' || o === 'K')) errors.push(`R changed illegally at slot ${i + 1}.`);
-          if (s === 'L' && !(o === 'L' || o === 'K')) errors.push(`L changed illegally at slot ${i + 1}.`);
-          if (o === 'K') {
-            kickRun += 1;
-            if (kickRun > 2) errors.push(`Too many consecutive kicks ending at slot ${i + 1}.`);
-          } else {
-            kickRun = 0;
-          }
-        }
-        for (let i = 0; i < 16; i++) {
-          const a = ex.sticking[i], b = ex.sticking[(i + 1) % 16], c = ex.sticking[(i + 2) % 16];
-          if (a === b && b === c) errors.push(`Triple ${a} detected starting at slot ${i + 1}.`);
-        }
-        return [...new Set(errors)];
-      }
-
-      function buildExercise(number, complexity, allowedGroupSizes, chopMode, rudimentBasis, forceRightStart, ghostMode) {
-        let attempts = 0;
-        while (attempts < 60) {
-          attempts += 1;
-          const grouping = generateGrouping(allowedGroupSizes, chopMode);
-          const built = buildSticking(grouping, complexity, rudimentBasis, forceRightStart);
-          const downbeatAccents = applyDownbeatAwareness(built.accents);
-          const resolved = applyPhraseResolution(built.sticking, downbeatAccents, complexity);
-          const ghosts = applyGhostNotes(resolved.sticking, resolved.accents, grouping, complexity, ghostMode);
-          const orchestration = orchestrate(resolved.sticking, resolved.accents, grouping, complexity, forceRightStart);
-          const exercise = {
-            number,
-            grouping,
-            sticking: resolved.sticking,
-            accents: resolved.accents,
-            orchestration,
-            ghosts,
-            complexity,
-            forceRightStart
-          };
-          const errors = validateExercise(exercise);
-          if (!errors.length) return exercise;
-        }
-        throw new Error('Failed to generate a valid exercise with current settings.');
-      }
-
-      function padToken(token) { return String(token).padEnd(3, ' '); }
-      function groupPipes(row, grouping) {
-        const out = [];
-        let index = 0;
-        grouping.forEach((size, groupIndex) => {
-          for (let i = 0; i < size; i++) out.push(row[index++]);
-          if (groupIndex < grouping.length - 1) out.push('|');
-        });
-        return out;
-      }
-      function makeAccentRow(accents, grouping) { return groupPipes(accents.map(a => a ? '>' : '.'), grouping).map(padToken).join(''); }
-      function makeHHRow(grouping) { return groupPipes(HH, grouping).map(padToken).join(''); }
-      function makeVoiceRow(voice, grouping, ghosts = Array(16).fill(false)) {
-        const rendered = voice.map((note, i) => ghosts[i] && (note === 'R' || note === 'L') ? `${note.toLowerCase()}.` : note);
-        return groupPipes(rendered, grouping).map(padToken).join('');
-      }
-      function renderChart(voice, accents, grouping, ghosts = Array(16).fill(false)) {
-        return [
-          makeAccentRow(accents, grouping),
-          makeHHRow(grouping),
-          makeVoiceRow(voice, grouping, ghosts)
-        ].join('\n');
-      }
-
-      let samples = { kick: null, snare: null, hihat: null };
-
-      async function loadSample(url) {
-        const res = await fetch(url);
-        const arrayBuffer = await res.arrayBuffer();
-        return await audioContext.decodeAudioData(arrayBuffer);
-      }
-
-      async function ensureAudioContext() {
-        if (!audioContext) {
-          const Ctx = window.AudioContext || window.webkitAudioContext;
-          audioContext = new Ctx();
-        }
-        if (audioContext.state === 'suspended') await audioContext.resume();
-
-        // lazy load samples
-        if (!samples.kick) {
-          try {
-            samples.kick = await loadSample('kick.mp3');
-            samples.snare = await loadSample('snare.mp3');
-            samples.hihat = await loadSample('hihat.mp3');
-          } catch (e) {
-            console.warn('Sample loading failed, falling back to synth');
-          }
-        }
-        return audioContext;
-      }
-
-      function clearScheduledPlayback() {
-        scheduledTimeouts.forEach(id => clearTimeout(id));
-        scheduledTimeouts = [];
-        activeNodes.forEach(node => {
-          try { node.stop && node.stop(); } catch (_) {}
-          try { node.disconnect && node.disconnect(); } catch (_) {}
-        });
-        activeNodes = [];
-        isPlaying = false;
-        currentPlaybackExerciseNumber = null;
-        currentPlaybackVersion = null;
-        nextLoopStartTime = null;
-        document.querySelectorAll('.play-toggle-btn').forEach(btn => {
-          btn.textContent = 'Play beat';
-          btn.dataset.playing = 'false';
-        });
-      }
-      function synthTone(ctx, time, freqStart, freqEnd, duration, gainValue, type = 'triangle') {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = type;
-        osc.frequency.setValueAtTime(freqStart, time);
-        osc.frequency.exponentialRampToValueAtTime(Math.max(1, freqEnd), time + duration);
-        gain.gain.setValueAtTime(gainValue, time);
-        gain.gain.exponentialRampToValueAtTime(0.0001, time + duration);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start(time);
-        osc.stop(time + duration);
-        activeNodes.push(osc, gain);
-      }
-      function triggerMetronomeClick(ctx, time, beatIndex = 0) {
-        const isDownbeat = beatIndex === 0;
-        synthTone(ctx, time, isDownbeat ? 2000 : 1600, isDownbeat ? 1300 : 1100, 0.04, isDownbeat ? 0.35 : 0.22, 'square');
-      }
-      function playBuffer(ctx, buffer, time, gainValue = 1) {
-        const src = ctx.createBufferSource();
-        const gain = ctx.createGain();
-        src.buffer = buffer;
-        gain.gain.value = gainValue;
-        src.connect(gain);
-        gain.connect(ctx.destination);
-        src.start(time);
-        activeNodes.push(src, gain);
-      }
-
-      function triggerStepSound(ctx, note, ghost, accent, hh, time, stepIndex = 0) {
-        if (samples.hihat && hh === 'x') {
-          playBuffer(ctx, samples.hihat, time, 0.15);
-        }
-
-        if (note === 'K') {
-          if (samples.kick) playBuffer(ctx, samples.kick, time, accent ? 1 : 0.8);
-          else synthTone(ctx, time, 90, 40, 0.12, 0.4, 'sine');
-          return;
-        }
-
-        if (note === 'R' || note === 'L') {
-          const gain = ghost ? 0.2 : accent ? 1 : 0.6;
-          if (samples.snare) playBuffer(ctx, samples.snare, time, gain);
-          else synthTone(ctx, time, 200, 120, 0.08, gain * 0.2, 'triangle');
-        }
-      }
-      async function playExercise(exerciseNumber, version = 'orchestration') {
-        const same = isPlaying && currentPlaybackExerciseNumber === exerciseNumber && currentPlaybackVersion === version;
-        if (same) { clearScheduledPlayback(); return; }
-        const ex = lastExercises.find(item => item.number === exerciseNumber);
-        if (!ex) return;
-        clearScheduledPlayback();
-        const bpm = Math.max(30, Math.min(260, Number(els.bpm.value) || 80));
-        els.bpm.value = bpm;
-        const loopPlayback = !!els.loopPlayback.checked;
-        const metronomeClick = !!els.metronomeClick.checked;
-        const stepSec = (60 / bpm) / 4;
-        const barSec = stepSec * 16;
-        const ctx = await ensureAudioContext();
-        isPlaying = true;
-        currentPlaybackExerciseNumber = exerciseNumber;
-        currentPlaybackVersion = version;
-        document.querySelectorAll('.play-toggle-btn').forEach(btn => {
-          const match = Number(btn.dataset.exerciseNumber) === exerciseNumber && btn.dataset.version === version;
-          btn.textContent = match ? 'Stop' : 'Play beat';
-          btn.dataset.playing = match ? 'true' : 'false';
-        });
-        const voice = version === 'sticking' ? ex.sticking : ex.orchestration;
-        const scheduleBarAt = (startTime) => {
-          for (let i = 0; i < 16; i++) {
-            const jitter = (Math.random() - 0.5) * 0.01;
-            const stepTime = startTime + (i * stepSec) + jitter;
-            triggerStepSound(ctx, voice[i], !!ex.ghosts[i], !!ex.accents[i], HH[i], stepTime, i);
-            if (metronomeClick && i % 4 === 0) triggerMetronomeClick(ctx, stepTime, i / 4);
-          }
-        };
-        if (loopPlayback) {
-          nextLoopStartTime = ctx.currentTime + 0.05;
-          scheduleBarAt(nextLoopStartTime);
-          nextLoopStartTime += barSec;
-          const scheduler = () => {
-            if (!isPlaying || currentPlaybackExerciseNumber !== exerciseNumber || currentPlaybackVersion !== version) return;
-            while (nextLoopStartTime !== null && nextLoopStartTime < ctx.currentTime + 0.25) {
-              scheduleBarAt(nextLoopStartTime);
-              nextLoopStartTime += barSec;
-            }
-            const id = setTimeout(scheduler, 50);
-            scheduledTimeouts.push(id);
-          };
-          scheduledTimeouts.push(setTimeout(scheduler, 50));
-        } else {
-          const startTime = ctx.currentTime + 0.05;
-          scheduleBarAt(startTime);
-          scheduledTimeouts.push(setTimeout(() => clearScheduledPlayback(), (barSec * 1000) + 100));
-        }
-      }
-
-      function renderExercise(ex) {
-        const block = document.createElement('div');
-        block.className = 'exercise';
-        const title = document.createElement('h2');
-        title.textContent = `Exercise ${ex.number} — ${ex.grouping.join(' | ')}`;
-        block.appendChild(title);
-
-        const sTitle = document.createElement('div');
-        sTitle.className = 'chart-title';
-        sTitle.textContent = 'Sticking';
-        block.appendChild(sTitle);
-        const sActions = document.createElement('div');
-        sActions.className = 'chart-actions';
-        const sPlay = document.createElement('button');
-        sPlay.type = 'button';
-        sPlay.textContent = 'Play beat';
-        sPlay.className = 'play-toggle-btn';
-        sPlay.dataset.exerciseNumber = String(ex.number);
-        sPlay.dataset.version = 'sticking';
-        sPlay.dataset.playing = 'false';
-        sPlay.addEventListener('click', () => playExercise(ex.number, 'sticking'));
-        sActions.appendChild(sPlay);
-        block.appendChild(sActions);
-        const sPre = document.createElement('pre');
-        sPre.textContent = renderChart(ex.sticking, ex.accents, ex.grouping, ex.ghosts);
-        block.appendChild(sPre);
-
-        const oTitle = document.createElement('div');
-        oTitle.className = 'chart-title';
-        oTitle.textContent = 'Orchestrating';
-        block.appendChild(oTitle);
-        const oActions = document.createElement('div');
-        oActions.className = 'chart-actions';
-        const oPlay = document.createElement('button');
-        oPlay.type = 'button';
-        oPlay.textContent = 'Play beat';
-        oPlay.className = 'play-toggle-btn';
-        oPlay.dataset.exerciseNumber = String(ex.number);
-        oPlay.dataset.version = 'orchestration';
-        oPlay.dataset.playing = 'false';
-        oPlay.addEventListener('click', () => playExercise(ex.number, 'orchestration'));
-        oActions.appendChild(oPlay);
-        block.appendChild(oActions);
-        const oPre = document.createElement('pre');
-        oPre.textContent = renderChart(ex.orchestration, ex.accents, ex.grouping, ex.ghosts);
-        block.appendChild(oPre);
-        return block;
-      }
-
-      async function copyJson() {
-        if (!lastExercises.length) return;
-        const payload = JSON.stringify(lastExercises, null, 2);
-        const old = els.copyJsonBtn.textContent;
-        try {
-          if (navigator.clipboard && window.isSecureContext) {
-            await navigator.clipboard.writeText(payload);
-          } else {
-            const ta = document.createElement('textarea');
-            ta.value = payload;
-            ta.style.position = 'absolute';
-            ta.style.left = '-9999px';
-            document.body.appendChild(ta);
-            ta.select();
-            document.execCommand('copy');
-            document.body.removeChild(ta);
-          }
-          els.copyJsonBtn.textContent = 'Copied';
-        } catch (_) {
-          els.copyJsonBtn.textContent = 'Copy failed';
-        }
-        setTimeout(() => { els.copyJsonBtn.textContent = old; }, 1000);
-      }
-
-      function generateExercises() {
-        const allowedGroupSizes = getSelectedGroupSizes();
-        if (!allowedGroupSizes.length) {
-          els.output.className = 'empty';
-          els.output.textContent = 'Select at least one group size.';
-          lastExercises = [];
-          return;
-        }
-        const count = Number(els.count.value);
-        const complexity = els.complexity.value;
-        const chopMode = els.chopMode.checked;
-        const rudimentBasis = els.rudimentBasis.value;
-        const forceRightStart = els.forceRightStart.checked;
-        const ghostMode = els.ghostMode.checked;
-
-        clearScheduledPlayback();
-        els.output.innerHTML = '';
-        els.output.className = '';
-        try {
-          lastExercises = Array.from({ length: count }, (_, i) => buildExercise(i + 1, complexity, allowedGroupSizes, chopMode, rudimentBasis, forceRightStart, ghostMode));
-          lastExercises.forEach(ex => els.output.appendChild(renderExercise(ex)));
-          els.output.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        } catch (err) {
-          els.output.className = 'empty';
-          els.output.textContent = err.message;
-          lastExercises = [];
-        }
-      }
-
-      els.groupSizesTrigger.addEventListener('click', () => {
-        els.groupSizesMenu.classList.toggle('hidden');
-      });
-      els.selectAllGroupsBtn.addEventListener('click', () => setAllGroupSizes(true));
-      els.deselectAllGroupsBtn.addEventListener('click', () => setAllGroupSizes(false));
-      document.querySelectorAll('.group-size-option').forEach(el => el.addEventListener('change', updateGroupSizesSummary));
-      document.addEventListener('click', event => {
-        if (!els.groupSizesMenu.contains(event.target) && !els.groupSizesTrigger.contains(event.target)) {
-          els.groupSizesMenu.classList.add('hidden');
-        }
-      });
-      els.generateBtn.addEventListener('click', generateExercises);
-      els.copyJsonBtn.addEventListener('click', copyJson);
-      updateGroupSizesSummary();
-    });
-  </script>
 </body>
 </html>
