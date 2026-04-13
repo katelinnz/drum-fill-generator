@@ -490,7 +490,7 @@
       <h1>Drum Fill Generator</h1>
       <div style="display:flex; align-items:center; gap:12px;">
         <button id="toggleFavouritesBtn" type="button" style="width:auto; min-height:42px; padding:0 16px; font-size:16px; background:var(--button-2);">Favourites (0)</button>
-        <div class="version">v1.37</div>
+        <div class="version">v1.38</div>
       </div>
     </div>
 
@@ -1073,6 +1073,16 @@
       if ((hat === 'x' || hat === 'X') && sampleBuffers.hihat) {
         playBuffer(ctx, sampleBuffers.hihat, start, hatGain, hatRate);
       } else if (hat === 'x' || hat === 'X') {
+        var quarterHatAccent = stepIndex === 0 && accent;
+        playTone(
+          ctx,
+          quarterHatAccent ? 1500 : 1400,
+          start,
+          0.04,
+          quarterHatAccent ? 0.05 : 0.03,
+          'square'
+        );
+      } else if (hat === 'x' || hat === 'X') {
         playTone(ctx, accent ? 1500 : 1400, start, 0.04, accent ? 0.05 : 0.03, 'square');
       }
 
@@ -1092,7 +1102,7 @@
         var snareGain = ghost ? 0.22 : (accent ? 1.05 : 0.66);
         var snareRate = ghost ? 0.97 : (accent ? 1.02 : 0.995);
         if (sampleBuffers.snare) playBuffer(ctx, sampleBuffers.snare, start, snareGain, snareRate);
-        else playTone(ctx, accent ? 210 : 180, start, 0.08, ghost ? 0.06 : (accent ? 0.17 : 0.1), 'triangle');
+        else playTone(ctx, accent ? 220 : 170, start, 0.08, ghost ? 0.025 : (accent ? 0.2 : 0.09), 'triangle');
       }
     }
 
