@@ -9,218 +9,451 @@
       --bg: #0b0f14;
       --panel: #12161c;
       --panel-2: #1a1f26;
-      --text: #e6e6e6;
+      --text: #e8edf2;
       --muted: #8b949e;
-      --accent: #2a2f36;
-      --accent-2: #22c55e;
-      --border: #2a2f36;
+      --border: #2a313a;
+      --green: #4ade80;
+      --button: #3d4d6d;
+      --button-hover: #4a5c82;
+      --button-2: #111827;
       --code: #05080c;
     }
 
     * { box-sizing: border-box; }
-    body {
+    html, body {
       margin: 0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
       background: var(--bg);
       color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
+    body { min-height: 100vh; }
+
     .wrap {
-      max-width: 1100px;
+      max-width: 1600px;
       margin: 0 auto;
-      padding: 24px;
+      padding: 14px 18px 32px;
     }
+
+    .header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
     h1 {
-      margin: 0 0 16px;
-      font-size: 28px;
+      margin: 0;
+      font-size: clamp(24px, 4vw, 46px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+    }
+
+    .version {
+      font-size: 12px;
+      line-height: 1;
+      color: var(--muted);
       font-weight: 700;
+      flex: 0 0 auto;
+      text-align: right;
     }
 
     .controls {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 12px 16px;
+      grid-template-columns: 1.05fr 1.05fr 0.8fr 1.2fr;
+      gap: 16px 20px;
       background: var(--panel);
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 16px;
-      margin-bottom: 24px;
+      border-radius: 22px;
+      padding: 18px 22px 20px;
+      margin-bottom: 28px;
       align-items: start;
     }
-    .control {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
+
+    .control,
+    .bpm-group,
+    .settings-block,
+    .playback-block,
+    .actions-block {
       min-width: 0;
-      position: relative;
     }
-    label {
-      font-size: 12px;
-      color: var(--muted);
-      font-weight: 600;
-    }
-    select, input[type="number"], button {
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      background: var(--panel-2);
-      color: var(--text);
-      padding: 9px 10px;
-      font: inherit;
-    }
-    button {
-      cursor: pointer;
-      font-weight: 600;
-    }
-    button:hover { border-color: var(--accent); }
-    #generateBtn {
-      background: #1f2933;
-      border-color: #374151;
-      color: #e6e6e6;
-    }
-    #generateBtn:hover {
-      background: #2a313a;
-      border-color: #4b5563;
-    }
-    #copyJsonBtn { background: #0b1220; }
 
-    .multi-select-trigger {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      text-align: left;
-      min-height: 42px;
-    }
-    .multi-select-menu {
-      position: absolute;
-      top: calc(100% + 6px);
-      left: 0;
-      right: 0;
-      z-index: 20;
-      background: var(--panel-2);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 10px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
-    }
-    .hidden { display: none; }
-    .menu-actions {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 10px;
-    }
-    .menu-actions button {
-      flex: 1;
-      padding: 7px 8px;
-      font-size: 13px;
-    }
-    .group-option {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 2px;
-      color: var(--text);
-      font-size: 14px;
-    }
-    .group-option input { margin: 0; }
-
-    .settings-row {
-      display: flex;
-      gap: 16px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-    .playback-row {
-      align-self: end;
-      min-height: 42px;
-      padding-bottom: 1px;
-    }
-    .settings-check {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      color: var(--muted);
-      font-size: 14px;
-    }
-    .settings-check input { margin: 0; }
+    .control,
     .bpm-group {
       display: flex;
       flex-direction: column;
-      gap: 6px;
-      align-self: flex-end;
+      gap: 8px;
+      position: relative;
     }
-    .actions-row {
-      grid-column: span 4;
-      display: flex;
-      gap: 12px;
-      margin-top: 4px;
-    }
-    .actions-row button { flex: 1; }
 
-    .exercise {
-      background: var(--panel);
+    .settings-block {
+      grid-column: 1 / 3;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 18px 26px;
+      padding-top: 10px;
+    }
+
+    .bpm-group {
+      grid-column: 3 / 5;
+      grid-row: 3;
+    }
+
+    .playback-block {
+      grid-column: 3 / 5;
+      grid-row: 4;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 18px 26px;
+      padding-top: 2px;
+    }
+
+    .actions-block {
+      grid-column: 3 / 5;
+      grid-row: 5;
+      display: flex;
+      gap: 14px;
+      align-items: end;
+    }
+
+    .actions-block button {
+      flex: 1;
+    }
+
+    label {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    select,
+    input[type="number"],
+    button {
+      width: 100%;
+      min-height: 56px;
+      border-radius: 14px;
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 18px;
+      background: var(--panel-2);
+      color: var(--text);
+      font: inherit;
+      padding: 0 18px;
     }
-    .exercise h2 {
-      margin: 0 0 10px;
+
+    select,
+    input[type="number"] {
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    select {
+      -webkit-appearance: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23e8edf2' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      padding-right: 48px;
+    }
+
+    button {
+      cursor: pointer;
+      font-size: 22px;
+      font-weight: 600;
+      transition: background-color 120ms ease, border-color 120ms ease;
+    }
+
+    button:hover { border-color: #42506a; }
+    #generateBtn { background: var(--button); }
+    #generateBtn:hover { background: var(--button-hover); }
+    #copyJsonBtn { background: var(--button-2); }
+
+    .multi-select-trigger {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-align: left;
+      padding-right: 14px;
+    }
+
+    .multi-select-trigger .caret {
       font-size: 18px;
-      font-weight: 700;
+      color: var(--text);
+      flex: 0 0 auto;
     }
-    .chart-title {
-      font-weight: 700;
-      margin: 16px 0 8px;
-      color: #4ade80;
+
+    .multi-select-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      right: 0;
+      z-index: 50;
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
     }
-    .chart-actions {
-      margin-bottom: 6px;
+
+    .multi-select-menu.hidden { display: none; }
+
+    .menu-actions {
       display: flex;
       gap: 8px;
+      margin-bottom: 8px;
     }
+
+    .menu-actions button {
+      min-height: 38px;
+      font-size: 14px;
+      padding: 0 12px;
+    }
+
+    .group-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 6px;
+      color: var(--text);
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .group-option input,
+    .settings-check input {
+      width: 18px;
+      height: 18px;
+      margin: 0;
+      accent-color: #f05ba7;
+    }
+
+    .settings-check {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 16px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .exercise {
+      position: relative;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 20px 22px 22px;
+      margin-bottom: 22px;
+    }
+
+    .exercise h2 {
+      margin: 0 0 18px;
+      font-size: clamp(26px, 2.7vw, 54px);
+      line-height: 1.08;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .chart-title {
+      margin: 18px 0 10px;
+      color: var(--green);
+      font-size: clamp(20px, 2vw, 28px);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .chart-actions { margin-bottom: 12px; }
+
     .chart-actions button {
-      font-size: 13px;
-      padding: 6px 10px;
       width: auto;
-      min-width: 110px;
+      min-height: 0;
+      min-width: 146px;
+      padding: 14px 22px;
+      font-size: 22px;
+      border-radius: 14px;
     }
-    .play-toggle-btn[data-playing="true"] {
-      background: var(--accent-2);
-      border-color: var(--accent-2);
-      color: #04130b;
+
+    .chart-shell {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 16px;
     }
+
     pre {
       margin: 0;
-      border-radius: 8px;
-      padding: 10px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      display: block;
+      width: max-content;
+      min-width: 100%;
+      max-width: none;
+      border-radius: 16px;
+      padding: 20px 22px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: clamp(18px, 2.15vw, 32px);
+      line-height: 1.55;
       background: var(--code);
-      color: var(--text);
       border: 1px solid var(--border);
-      overflow-x: auto;
-      line-height: 1.7;
+      white-space: pre;
+      overflow: visible;
     }
+
     .empty {
       text-align: center;
       padding: 30px;
       border: 1px dashed var(--border);
-      border-radius: 12px;
+      border-radius: 16px;
       color: var(--muted);
     }
 
-    @media (max-width: 800px) {
-      .controls { grid-template-columns: 1fr 1fr; }
-      .actions-row { grid-column: span 2; }
+    .hidden-panel { display: none; }
+
+    .favourite-btn {
+      position: absolute;
+      top: 16px;
+      right: 18px;
+      background: transparent;
+      border: none;
+      font-size: 22px;
+      cursor: pointer;
+      color: var(--muted);
+      transition: transform 0.15s ease, color 0.15s ease;
     }
-    @media (max-width: 500px) {
-      .controls { grid-template-columns: 1fr; }
-      .actions-row { grid-column: span 1; }
+
+    .favourite-btn:hover {
+      transform: scale(1.1);
+      color: var(--text);
+    }
+
+    .favourite-btn.active {
+      color: #f05ba7;
+    }
+
+    .exercise-tools button {
+      width: auto;
+      min-height: 0;
+      min-width: 0;
+      padding: 10px 16px;
+      font-size: 16px;
+      border-radius: 12px;
+    }
+
+    .secondary-btn {
+      background: var(--button-2);
+    }
+
+    .danger-btn {
+      background: #2a1620;
+      border-color: #4a2635;
+    }
+
+    @media (max-width: 1200px) {
+      .controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .settings-block,
+      .bpm-group,
+      .playback-block,
+      .actions-block { grid-column: 1 / -1; grid-row: auto; }
+    }
+
+    @media (max-width: 820px) {
+      .wrap { padding: 12px 14px 24px; }
+      .header { margin-bottom: 14px; }
+      .controls {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+        padding: 16px;
+      }
+      select, input[type="number"], button { min-height: 54px; }
+      .settings-block,
+      .bpm-group,
+      .playback-block,
+      .actions-block { grid-column: 1 / -1; grid-row: auto; }
+    }
+
+    @media (max-width: 640px) and (orientation: portrait) {
+      .wrap { padding: 10px 12px 24px; }
+      .controls {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        padding: 14px;
+      }
+      .control,
+      .settings-block,
+      .bpm-group,
+      .playback-block,
+      .actions-block { grid-column: 1 / -1; grid-row: auto; }
+      select, input[type="number"], button {
+        min-height: 48px;
+        padding: 0 14px;
+      }
+      select, input[type="number"] { font-size: 16px; }
+      .settings-block,
+      .playback-block { gap: 14px 18px; }
+      .settings-check { font-size: 14px; }
+      .actions-block { gap: 10px; }
+      .actions-block button { font-size: 18px; }
+      .exercise { padding: 14px; }
+      .exercise h2 { font-size: 28px; }
+      .chart-title { font-size: 24px; }
+      .chart-actions button {
+        min-width: 122px;
+        font-size: 18px;
+        padding: 12px 18px;
+      }
+      pre {
+        width: max-content;
+        min-width: 100%;
+        font-size: 15px;
+        line-height: 1.55;
+        padding: 14px 16px;
+      }
+    }
+
+    @media (max-width: 932px) and (orientation: landscape) {
+      .wrap { padding: 10px 12px 18px; }
+      .controls {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px 12px;
+        padding: 12px;
+      }
+      .settings-block,
+      .bpm-group,
+      .playback-block,
+      .actions-block { grid-column: 1 / -1; grid-row: auto; }
+      select, input[type="number"], button { min-height: 42px; padding: 0 12px; }
+      select, input[type="number"], button, .chart-actions button { font-size: 14px; }
+      .exercise { padding: 14px; margin-bottom: 14px; }
+      .exercise h2 { margin-bottom: 10px; font-size: 24px; }
+      .chart-title { margin: 12px 0 8px; font-size: 20px; }
+      .chart-actions button { min-width: 120px; padding: 10px 16px; font-size: 16px; }
+      .chart-shell { overflow-x: hidden; }
+      pre {
+        width: 100%;
+        min-width: 0;
+        font-size: clamp(14px, 2.2vw, 20px);
+        line-height: 1.5;
+        padding: 16px 18px;
+      }
     }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <h1>Drum Fill Generator</h1>
+    <div class="header">
+      <h1>Drum Fill Generator</h1>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <button id="toggleFavouritesBtn" type="button" style="width:auto; min-height:42px; padding:0 16px; font-size:16px; background:var(--button-2);">Favourites (0)</button>
+        <div class="version">v1.34</div>
+      </div>
+    </div>
+
+    <div id="favouritesPanel" class="exercise hidden-panel">
+      <h2 style="font-size:clamp(22px,2.2vw,34px); margin-bottom:14px;">Favourites</h2>
+      <div id="favouritesList" class="empty">No favourites saved yet.</div>
+    </div>
 
     <div class="controls">
       <div class="control">
@@ -245,25 +478,25 @@
         <label>Group sizes</label>
         <button type="button" id="groupSizesTrigger" class="multi-select-trigger">
           <span id="groupSizesSummary">2, 3, 4, 5</span>
-          <span>▾</span>
+          <span class="caret">▾</span>
         </button>
         <div id="groupSizesMenu" class="multi-select-menu hidden">
           <div class="menu-actions">
             <button type="button" id="selectAllGroupsBtn">Select all</button>
             <button type="button" id="deselectAllGroupsBtn">Deselect all</button>
           </div>
-          <label class="group-option"><input type="checkbox" class="group-size-option" value="2" checked /> 2</label>
-          <label class="group-option"><input type="checkbox" class="group-size-option" value="3" checked /> 3</label>
-          <label class="group-option"><input type="checkbox" class="group-size-option" value="4" checked /> 4</label>
-          <label class="group-option"><input type="checkbox" class="group-size-option" value="5" checked /> 5</label>
-          <label class="group-option"><input type="checkbox" class="group-size-option" value="6" /> 6</label>
-          <label class="group-option"><input type="checkbox" class="group-size-option" value="7" /> 7</label>
+          <label class="group-option"><input type="checkbox" class="group-size-option" value="2" checked> 2</label>
+          <label class="group-option"><input type="checkbox" class="group-size-option" value="3" checked> 3</label>
+          <label class="group-option"><input type="checkbox" class="group-size-option" value="4" checked> 4</label>
+          <label class="group-option"><input type="checkbox" class="group-size-option" value="5" checked> 5</label>
+          <label class="group-option"><input type="checkbox" class="group-size-option" value="6"> 6</label>
+          <label class="group-option"><input type="checkbox" class="group-size-option" value="7"> 7</label>
         </div>
       </div>
 
       <div class="control">
-        <label for="rudimentBasis">Rudiment</label>
-        <select id="rudimentBasis">
+        <label for="rudiment">Rudiment</label>
+        <select id="rudiment">
           <option value="random" selected>Random mix</option>
           <option value="single">Single stroke</option>
           <option value="double">Double stroke</option>
@@ -273,723 +506,811 @@
         </select>
       </div>
 
-      <div class="settings-row">
-        <label class="settings-check"><input type="checkbox" id="forceRightStart" checked> Start R/K</label>
-        <label class="settings-check"><input type="checkbox" id="ghostMode"> Ghost</label>
-        <label class="settings-check"><input type="checkbox" id="chopMode"> Chop</label>
+      <div class="settings-block">
+        <label class="settings-check"><input type="checkbox" id="startToggle" checked> Start R/K</label>
+        <label class="settings-check"><input type="checkbox" id="ghostToggle"> Ghost</label>
+        <label class="settings-check"><input type="checkbox" id="chopToggle"> Chop</label>
       </div>
 
       <div class="bpm-group">
         <label for="bpm">BPM</label>
-        <input id="bpm" type="number" value="80" min="30" max="260">
+        <input id="bpm" type="number" value="80" />
       </div>
 
-      <div class="settings-row playback-row">
-        <label class="settings-check"><input type="checkbox" id="metronomeClick"> Click</label>
-        <label class="settings-check"><input type="checkbox" id="loopPlayback"> Loop</label>
+      <div class="playback-block">
+        <label class="settings-check"><input type="checkbox" id="clickToggle"> Click</label>
+        <label class="settings-check"><input type="checkbox" id="loopToggle"> Loop</label>
       </div>
 
-      <div class="actions-row">
+      <div class="actions-block">
         <button id="generateBtn" type="button">Generate</button>
         <button id="copyJsonBtn" type="button">Copy JSON</button>
       </div>
     </div>
 
-    <div id="output" class="empty">Press Generate.</div>
+    <div id="results" class="empty">Press Generate.</div>
   </div>
 
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const HH = Array(16).fill('-');
-      HH[0] = 'x'; HH[4] = 'x'; HH[8] = 'x'; HH[12] = 'x';
+    var TOTAL_STEPS = 16;
+    var audioCtx = null;
+    var activeButton = null;
+    var activeTimer = null;
+    var activeNodes = [];
+    var sampleBuffers = { kick: null, snare: null, hihat: null };
+    var samplesAttempted = false;
+    var lastExercises = [];
 
-      const CELL_LIBRARY = {
-        2: [
-          { sticking: ['R','L'], accents: [1,0], weight: 6, basis: 'single' },
-          { sticking: ['L','R'], accents: [1,0], weight: 4, basis: 'single' },
-          { sticking: ['R','R'], accents: [1,0], weight: 3, basis: 'double' },
-          { sticking: ['L','L'], accents: [1,0], weight: 3, basis: 'double' }
-        ],
-        3: [
-          { sticking: ['R','L','R'], accents: [1,0,0], weight: 7, basis: 'single' },
-          { sticking: ['L','R','L'], accents: [1,0,0], weight: 5, basis: 'single' },
-          { sticking: ['R','R','L'], accents: [1,0,0], weight: 2, basis: 'single' },
-          { sticking: ['L','L','R'], accents: [1,0,0], weight: 2, basis: 'single' }
-        ],
-        4: [
-          { sticking: ['R','L','R','R'], accents: [1,0,0,0], weight: 7, basis: 'paradiddle' },
-          { sticking: ['L','R','L','L'], accents: [1,0,0,0], weight: 6, basis: 'paradiddle' },
-          { sticking: ['R','L','R','L'], accents: [1,0,0,0], weight: 5, basis: 'single' },
-          { sticking: ['R','R','L','L'], accents: [1,0,0,0], weight: 5, basis: 'double' },
-          { sticking: ['R','L','L','R'], accents: [1,0,0,0], weight: 6, basis: 'inverted-double' },
-          { sticking: ['L','R','R','L'], accents: [1,0,0,0], weight: 5, basis: 'inverted-double' }
-        ],
-        5: [
-          { sticking: ['R','R','L','L','R'], accents: [1,0,0,0,0], weight: 7, basis: 'roll' },
-          { sticking: ['L','L','R','R','L'], accents: [1,0,0,0,0], weight: 6, basis: 'roll' },
-          { sticking: ['R','L','R','L','R'], accents: [1,0,0,0,0], weight: 5, basis: 'single' },
-          { sticking: ['R','L','R','R','L'], accents: [1,0,0,0,0], weight: 4, basis: 'paradiddle' }
-        ],
-        6: [
-          { sticking: ['R','L','R','L','R','L'], accents: [1,0,0,1,0,0], weight: 5, basis: 'single' },
-          { sticking: ['R','L','L','R','R','L'], accents: [1,0,0,1,0,0], weight: 6, basis: 'roll' },
-          { sticking: ['R','L','R','R','L','L'], accents: [1,0,0,1,0,0], weight: 6, basis: 'paradiddle' }
-        ],
-        7: [
-          { sticking: ['R','L','R','L','R','L','R'], accents: [1,0,0,1,0,0,0], weight: 4, basis: 'single' },
-          { sticking: ['R','R','L','L','R','R','L'], accents: [1,0,0,0,1,0,0], weight: 6, basis: 'roll' }
-        ]
-      };
+    function rand(n) {
+      return Math.floor(Math.random() * n);
+    }
 
-      let lastExercises = [];
-      let audioContext = null;
-      let activeNodes = [];
-      let scheduledTimeouts = [];
-      let isPlaying = false;
-      let currentPlaybackExerciseNumber = null;
-      let currentPlaybackVersion = null;
-      let nextLoopStartTime = null;
+    function choice(arr) {
+      return arr[rand(arr.length)];
+    }
 
-      const els = {
-        output: document.getElementById('output'),
-        count: document.getElementById('count'),
-        complexity: document.getElementById('complexity'),
-        chopMode: document.getElementById('chopMode'),
-        forceRightStart: document.getElementById('forceRightStart'),
-        ghostMode: document.getElementById('ghostMode'),
-        rudimentBasis: document.getElementById('rudimentBasis'),
-        bpm: document.getElementById('bpm'),
-        loopPlayback: document.getElementById('loopPlayback'),
-        metronomeClick: document.getElementById('metronomeClick'),
-        copyJsonBtn: document.getElementById('copyJsonBtn'),
-        generateBtn: document.getElementById('generateBtn'),
-        groupSizesTrigger: document.getElementById('groupSizesTrigger'),
-        groupSizesMenu: document.getElementById('groupSizesMenu'),
-        groupSizesSummary: document.getElementById('groupSizesSummary'),
-        selectAllGroupsBtn: document.getElementById('selectAllGroupsBtn'),
-        deselectAllGroupsBtn: document.getElementById('deselectAllGroupsBtn')
-      };
+    function opposite(hand) {
+      return hand === 'R' ? 'L' : 'R';
+    }
 
-      function randInt(n) { return Math.floor(Math.random() * n); }
-      function chooseWeighted(items) {
-        const total = items.reduce((sum, item) => sum + item.weight, 0);
-        let roll = Math.random() * total;
-        for (const item of items) {
-          roll -= item.weight;
-          if (roll <= 0) return item;
-        }
-        return items[items.length - 1];
-      }
-
-      function getSelectedGroupSizes() {
-        return Array.from(document.querySelectorAll('.group-size-option:checked')).map(el => Number(el.value)).sort((a,b) => a-b);
-      }
-      function updateGroupSizesSummary() {
-        const sizes = getSelectedGroupSizes();
-        els.groupSizesSummary.textContent = sizes.length ? sizes.join(', ') : 'None selected';
-      }
-      function setAllGroupSizes(checked) {
-        document.querySelectorAll('.group-size-option').forEach(el => { el.checked = checked; });
-        updateGroupSizesSummary();
-      }
-
-      function compositions(total, allowed) {
-        const out = [];
-        function walk(rem, path) {
-          if (rem === 0) { out.push(path); return; }
-          for (const n of allowed) {
-            if (rem - n < 0) continue;
-            walk(rem - n, [...path, n]);
-          }
-        }
-        walk(total, []);
-        return out;
-      }
-
-      function groupingScore(grouping, chopMode) {
-        let score = 0;
-        if (chopMode) {
-          if (grouping.length >= 5) score += 5;
-        } else {
-          if (grouping.length <= 5) score += 6;
-          else if (grouping.length > 6) score -= 6;
-        }
-        const uniqueCount = new Set(grouping).size;
-        if (uniqueCount === 2) score += 5;
-        if (uniqueCount >= 4) score -= 3;
-        for (let i = 1; i < grouping.length; i++) if (grouping[i] === grouping[i - 1]) score += 2;
-        return score;
-      }
-
-      function generateGrouping(allowedGroupSizes, chopMode) {
-        let all = compositions(16, allowedGroupSizes);
-        if (!all.length) throw new Error('No valid 16-note groupings can be made from the selected group sizes.');
-        if (!chopMode) {
-          const preferred = all.filter(g => g.length <= 5);
-          if (preferred.length) all = preferred;
-        }
-        const scored = all.map(g => ({ g, weight: Math.max(1, groupingScore(g, chopMode)) }));
-        return chooseWeighted(scored).g;
-      }
-
-      function choosePrimaryBasis(requestedBasis, grouping, complexity) {
-        if (requestedBasis !== 'random') return requestedBasis;
-        const available = new Set();
-        grouping.forEach(size => (CELL_LIBRARY[size] || []).forEach(cell => available.add(cell.basis)));
-        const bag = [];
-        const add = (basis, count) => { if (available.has(basis)) for (let i=0;i<count;i++) bag.push(basis); };
-        if (complexity === 'easy') {
-          add('single', 8); add('double', 5); add('inverted-double', 3); add('paradiddle', 2); add('roll', 1);
-        } else {
-          add('single', 4); add('double', 3); add('inverted-double', 3); add('paradiddle', 4); add('roll', 3);
-        }
-        return bag.length ? bag[randInt(bag.length)] : 'single';
-      }
-
-      function applyDownbeatAwareness(accents) {
-        const out = [...accents];
-        if (!out[0]) out[0] = Math.random() < 0.6;
-        if (!out[8]) out[8] = Math.random() < 0.5;
-        if (!out[4] && Math.random() < 0.35) out[4] = true;
-        if (!out[12] && Math.random() < 0.4) out[12] = true;
-        return out;
-      }
-
-      function applyPhraseResolution(sticking, accents, complexity) {
-        const s = [...sticking];
-        const a = [...accents];
-        const endings = complexity === 'easy'
-          ? [
-              { sticking: ['R','L'], accents: [false,false] },
-              { sticking: ['R','L','R','L'], accents: [false,false,true,false] }
-            ]
-          : [
-              { sticking: ['R','L'], accents: [false,false] },
-              { sticking: ['R','L','R','L'], accents: [false,false,true,false] },
-              { sticking: ['R','L','R','R'], accents: [false,false,true,false] }
-            ];
-        const choice = endings[randInt(endings.length)];
-        const start = 16 - choice.sticking.length;
-        for (let i = 0; i < choice.sticking.length; i++) {
-          s[start + i] = choice.sticking[i];
-          a[start + i] = choice.accents[i];
-        }
-        return { sticking: s, accents: a };
-      }
-
-      function applyGhostNotes(sticking, accents, grouping, complexity, ghostMode) {
-        const ghosts = Array(16).fill(false);
-        if (!ghostMode) return ghosts;
-        let cursor = 0;
-        grouping.forEach(size => {
-          const start = cursor;
-          const end = cursor + size - 1;
-          for (let i = start + 1; i < end; i++) {
-            if (!accents[i] && sticking[i] === 'L') ghosts[i] = true;
-          }
-          if (complexity === 'easy') {
-            for (let i = start + 1; i < end; i++) {
-              if (sticking[i] === sticking[i + 1] && !accents[i] && !accents[i + 1]) {
-                ghosts[i] = true;
-                ghosts[i + 1] = true;
-              }
-            }
-          }
-          cursor += size;
-        });
-        return ghosts;
-      }
-
-      function buildSticking(grouping, complexity, requestedBasis, forceRightStart) {
-        function createsTripleRun(current, next) {
-          if (!current.length) return false;
-          let run = 1;
-          for (let i = current.length - 1; i > 0; i--) {
-            if (current[i] === current[i - 1]) run++;
-            else break;
-          }
-          let last = current[current.length - 1];
-          let tempRun = run;
-          for (const n of next.sticking) {
-            if (n === last) tempRun++;
-            else tempRun = 1;
-            last = n;
-            if (tempRun >= 3) return true;
-          }
-          return false;
-        }
-
-        const sticking = [];
-        const accents = [];
-        const primaryBasis = choosePrimaryBasis(requestedBasis, grouping, complexity);
-        let lastCell = null;
-        let repeatingMotif = null;
-
-        grouping.forEach((size, index) => {
-          const originalChoices = CELL_LIBRARY[size] || [];
-          let choices = [...originalChoices];
-
-          if (complexity === 'easy') {
-            const filtered = choices.filter(c => c.accents.filter(Boolean).length <= 1);
-            if (filtered.length) choices = filtered;
-          } else {
-            const filtered = choices.filter(c => !(size >= 4 && c.accents.filter(Boolean).length > 1));
-            if (filtered.length) choices = filtered;
-          }
-
-          const hasPrimaryBasis = choices.some(c => c.basis === primaryBasis);
-          const sameSizeRepeated = index > 0 && grouping[index] === grouping[index - 1];
-
-          const weightedChoices = choices.map(c => {
-            let weight = c.weight;
-            if (c.basis === primaryBasis) weight += hasPrimaryBasis ? (complexity === 'easy' ? 8 : 10) : 2;
-            else if (hasPrimaryBasis) weight -= complexity === 'easy' ? 4 : 3;
-            else weight += 1;
-
-            if (lastCell) {
-              if (sameSizeRepeated) {
-                if (complexity === 'easy') {
-                  if (JSON.stringify(c.sticking) === JSON.stringify(lastCell.sticking)) weight += 8;
-                  if (c.basis === lastCell.basis) weight += 3;
-                } else {
-                  if (c.basis === lastCell.basis) weight += 3;
-                  if (c.sticking[0] !== lastCell.sticking[0]) weight += 2;
-                }
-              }
-              if (c.basis === lastCell.basis) weight += 4;
-              const prevHand = sticking[sticking.length - 1];
-              if (prevHand && c.sticking[0] !== prevHand) weight += 1;
-            }
-
-            if (complexity === 'easy' && repeatingMotif && size === repeatingMotif.size && JSON.stringify(c.sticking) === JSON.stringify(repeatingMotif.sticking)) {
-              weight += 6;
-            }
-
-            if (index === 0 && forceRightStart && c.sticking[0] !== 'R') weight = 0;
-            if (createsTripleRun(sticking, c)) weight = 0;
-            return { ...c, weight: Math.max(0, weight) };
-          }).filter(c => c.weight > 0);
-
-          let pool = weightedChoices.length ? weightedChoices : choices.filter(c => !forceRightStart || index > 0 || c.sticking[0] === 'R');
-          if (!pool.length) pool = originalChoices.filter(c => !forceRightStart || index > 0 || c.sticking[0] === 'R');
-          if (!pool.length) throw new Error(`No sticking cells available for group size ${size} with current settings.`);
-
-          const cell = chooseWeighted(pool.map(c => ({ ...c, weight: Math.max(1, c.weight || 1) })));
-          sticking.push(...cell.sticking);
-          accents.push(...cell.accents.map(Boolean));
-
-          if (complexity === 'easy' && !repeatingMotif && index < grouping.length - 1 && grouping.slice(index + 1).includes(size)) {
-            repeatingMotif = { size, sticking: cell.sticking };
-          }
-          lastCell = cell;
-        });
-
-        return { sticking, accents };
-      }
-
-      function orchestrate(sticking, accents, grouping, complexity, forceRightStart) {
-        const orchestration = [...sticking];
-        const candidates = [];
-        for (let i = 0; i < sticking.length; i++) if (!accents[i]) candidates.push(i);
-
-        const groups = [];
-        let cursor = 0;
-        grouping.forEach(size => { groups.push({ start: cursor, end: cursor + size - 1, size }); cursor += size; });
-
-        const minKicks = complexity === 'intermediate' ? 3 : 2;
-        const maxKicks = complexity === 'intermediate' ? 5 : 4;
-        const targetKickCount = Math.min(maxKicks, Math.max(minKicks, Math.round(candidates.length * (complexity === 'intermediate' ? 0.34 : 0.24))));
-
-        function canPlaceKick(index) {
-          if (accents[index]) return false;
-          if (orchestration[index] === 'K') return false;
-          const prev = orchestration[index - 1];
-          const prev2 = orchestration[index - 2];
-          const next = orchestration[index + 1];
-          if (prev === 'K' && prev2 === 'K') return false;
-          if (prev === 'K' && next === 'K') return false;
-          return true;
-        }
-
-        function placementScore(index) {
-          let score = 0;
-          if (index % 4 === 2) score += 4;
-          if (index % 4 === 1 || index % 4 === 3) score += 3;
-          if (index % 4 === 0) score += 1;
-          if (accents[index - 1] || accents[index + 1]) score += 2;
-          if (accents[index + 1]) score -= 2;
-          const group = groups.find(g => index >= g.start && index <= g.end);
-          if (group) {
-            const offset = index - group.start;
-            if (offset > 0 && offset < group.size - 1) score += 2;
-            if (group.size >= 5 && offset >= 2) score += 1;
-          }
-          if (orchestration[index - 1] === 'K') score -= 3;
-          if (index === 0 && forceRightStart) score += 5;
-          return score;
-        }
-
-        function placeKick(index) {
-          if (!canPlaceKick(index)) return false;
-          orchestration[index] = 'K';
-          return true;
-        }
-
-        if (forceRightStart && !accents[0] && Math.random() < (complexity === 'easy' ? 0.4 : 0.65)) placeKick(0);
-
-        groups.forEach(group => {
-          const groupCandidates = [];
-          for (let i = group.start; i <= group.end; i++) if (!accents[i]) groupCandidates.push(i);
-          const shouldForceKick = complexity === 'easy'
-            ? group.size >= 5 || (group.size >= 3 && Math.random() < 0.3)
-            : group.size >= 4 || (group.size >= 3 && Math.random() < 0.55);
-          if (!shouldForceKick || !groupCandidates.length) return;
-          const ranked = groupCandidates.map(i => ({ i, score: placementScore(i) })).sort((a,b) => b.score - a.score);
-          placeKick(ranked[0].i);
-        });
-
-        let currentKickCount = orchestration.filter(n => n === 'K').length;
-        const rankedCandidates = candidates.map(i => ({ i, score: placementScore(i) + Math.random() * 0.75 })).sort((a,b) => b.score - a.score);
-        for (const c of rankedCandidates) {
-          if (currentKickCount >= targetKickCount) break;
-          if (placeKick(c.i)) currentKickCount += 1;
-        }
-        return orchestration;
-      }
-
-      function validateExercise(ex) {
-        const errors = [];
-        if (ex.grouping.reduce((a,b) => a + b, 0) !== 16) errors.push('Grouping does not total 16.');
-        if (ex.sticking.length !== 16 || ex.orchestration.length !== 16 || ex.accents.length !== 16) errors.push('One or more rows do not have 16 slots.');
-        if (ex.forceRightStart && ex.sticking[0] !== 'R') errors.push('Fill does not start with right hand.');
-        let kickRun = 0;
-        for (let i = 0; i < 16; i++) {
-          const s = ex.sticking[i], o = ex.orchestration[i], a = ex.accents[i];
-          if (a && o === 'K') errors.push(`Accent placed on K at slot ${i + 1}.`);
-          if (s === 'R' && !(o === 'R' || o === 'K')) errors.push(`R changed illegally at slot ${i + 1}.`);
-          if (s === 'L' && !(o === 'L' || o === 'K')) errors.push(`L changed illegally at slot ${i + 1}.`);
-          if (o === 'K') {
-            kickRun += 1;
-            if (kickRun > 2) errors.push(`Too many consecutive kicks ending at slot ${i + 1}.`);
-          } else {
-            kickRun = 0;
-          }
-        }
-        for (let i = 0; i < 16; i++) {
-          const a = ex.sticking[i], b = ex.sticking[(i + 1) % 16], c = ex.sticking[(i + 2) % 16];
-          if (a === b && b === c) errors.push(`Triple ${a} detected starting at slot ${i + 1}.`);
-        }
-        return [...new Set(errors)];
-      }
-
-      function buildExercise(number, complexity, allowedGroupSizes, chopMode, rudimentBasis, forceRightStart, ghostMode) {
-        let attempts = 0;
-        while (attempts < 60) {
-          attempts += 1;
-          const grouping = generateGrouping(allowedGroupSizes, chopMode);
-          const built = buildSticking(grouping, complexity, rudimentBasis, forceRightStart);
-          const downbeatAccents = applyDownbeatAwareness(built.accents);
-          const resolved = applyPhraseResolution(built.sticking, downbeatAccents, complexity);
-          const ghosts = applyGhostNotes(resolved.sticking, resolved.accents, grouping, complexity, ghostMode);
-          const orchestration = orchestrate(resolved.sticking, resolved.accents, grouping, complexity, forceRightStart);
-          const exercise = {
-            number,
-            grouping,
-            sticking: resolved.sticking,
-            accents: resolved.accents,
-            orchestration,
-            ghosts,
-            complexity,
-            forceRightStart
-          };
-          const errors = validateExercise(exercise);
-          if (!errors.length) return exercise;
-        }
-        throw new Error('Failed to generate a valid exercise with current settings.');
-      }
-
-      function padToken(token) { return String(token).padEnd(3, ' '); }
-      function groupPipes(row, grouping) {
-        const out = [];
-        let index = 0;
-        grouping.forEach((size, groupIndex) => {
-          for (let i = 0; i < size; i++) out.push(row[index++]);
-          if (groupIndex < grouping.length - 1) out.push('|');
-        });
-        return out;
-      }
-      function makeAccentRow(accents, grouping) { return groupPipes(accents.map(a => a ? '>' : '.'), grouping).map(padToken).join(''); }
-      function makeHHRow(grouping) { return groupPipes(HH, grouping).map(padToken).join(''); }
-      function makeVoiceRow(voice, grouping, ghosts = Array(16).fill(false)) {
-        const rendered = voice.map((note, i) => ghosts[i] && (note === 'R' || note === 'L') ? `${note.toLowerCase()}.` : note);
-        return groupPipes(rendered, grouping).map(padToken).join('');
-      }
-      function renderChart(voice, accents, grouping, ghosts = Array(16).fill(false)) {
-        return [
-          makeAccentRow(accents, grouping),
-          makeHHRow(grouping),
-          makeVoiceRow(voice, grouping, ghosts)
-        ].join('\n');
-      }
-
-      let samples = { kick: null, snare: null, hihat: null };
-
-      async function loadSample(url) {
-        const res = await fetch(url);
-        const arrayBuffer = await res.arrayBuffer();
-        return await audioContext.decodeAudioData(arrayBuffer);
-      }
-
-      async function ensureAudioContext() {
-        if (!audioContext) {
-          const Ctx = window.AudioContext || window.webkitAudioContext;
-          audioContext = new Ctx();
-        }
-        if (audioContext.state === 'suspended') await audioContext.resume();
-
-        // lazy load samples
-        if (!samples.kick) {
-          try {
-            samples.kick = await loadSample('kick.mp3');
-            samples.snare = await loadSample('snare.mp3');
-            samples.hihat = await loadSample('hihat.mp3');
-          } catch (e) {
-            console.warn('Sample loading failed, falling back to synth');
-          }
-        }
-        return audioContext;
-      }
-
-      function clearScheduledPlayback() {
-        scheduledTimeouts.forEach(id => clearTimeout(id));
-        scheduledTimeouts = [];
-        activeNodes.forEach(node => {
-          try { node.stop && node.stop(); } catch (_) {}
-          try { node.disconnect && node.disconnect(); } catch (_) {}
-        });
-        activeNodes = [];
-        isPlaying = false;
-        currentPlaybackExerciseNumber = null;
-        currentPlaybackVersion = null;
-        nextLoopStartTime = null;
-        document.querySelectorAll('.play-toggle-btn').forEach(btn => {
-          btn.textContent = 'Play beat';
-          btn.dataset.playing = 'false';
-        });
-      }
-      function synthTone(ctx, time, freqStart, freqEnd, duration, gainValue, type = 'triangle') {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = type;
-        osc.frequency.setValueAtTime(freqStart, time);
-        osc.frequency.exponentialRampToValueAtTime(Math.max(1, freqEnd), time + duration);
-        gain.gain.setValueAtTime(gainValue, time);
-        gain.gain.exponentialRampToValueAtTime(0.0001, time + duration);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start(time);
-        osc.stop(time + duration);
-        activeNodes.push(osc, gain);
-      }
-      function triggerMetronomeClick(ctx, time, beatIndex = 0) {
-        const isDownbeat = beatIndex === 0;
-        synthTone(ctx, time, isDownbeat ? 2000 : 1600, isDownbeat ? 1300 : 1100, 0.04, isDownbeat ? 0.35 : 0.22, 'square');
-      }
-      function playBuffer(ctx, buffer, time, gainValue = 1) {
-        const src = ctx.createBufferSource();
-        const gain = ctx.createGain();
-        src.buffer = buffer;
-        gain.gain.value = gainValue;
-        src.connect(gain);
-        gain.connect(ctx.destination);
-        src.start(time);
-        activeNodes.push(src, gain);
-      }
-
-      function triggerStepSound(ctx, note, ghost, accent, hh, time, stepIndex = 0) {
-        if (samples.hihat && hh === 'x') {
-          playBuffer(ctx, samples.hihat, time, 0.15);
-        }
-
-        if (note === 'K') {
-          if (samples.kick) playBuffer(ctx, samples.kick, time, accent ? 1 : 0.8);
-          else synthTone(ctx, time, 90, 40, 0.12, 0.4, 'sine');
+    function compositions(total, sizes) {
+      var results = [];
+      function walk(remaining, acc) {
+        if (remaining === 0) {
+          results.push(acc.slice());
           return;
         }
-
-        if (note === 'R' || note === 'L') {
-          const gain = ghost ? 0.2 : accent ? 1 : 0.6;
-          if (samples.snare) playBuffer(ctx, samples.snare, time, gain);
-          else synthTone(ctx, time, 200, 120, 0.08, gain * 0.2, 'triangle');
-        }
-      }
-      async function playExercise(exerciseNumber, version = 'orchestration') {
-        const same = isPlaying && currentPlaybackExerciseNumber === exerciseNumber && currentPlaybackVersion === version;
-        if (same) { clearScheduledPlayback(); return; }
-        const ex = lastExercises.find(item => item.number === exerciseNumber);
-        if (!ex) return;
-        clearScheduledPlayback();
-        const bpm = Math.max(30, Math.min(260, Number(els.bpm.value) || 80));
-        els.bpm.value = bpm;
-        const loopPlayback = !!els.loopPlayback.checked;
-        const metronomeClick = !!els.metronomeClick.checked;
-        const stepSec = (60 / bpm) / 4;
-        const barSec = stepSec * 16;
-        const ctx = await ensureAudioContext();
-        isPlaying = true;
-        currentPlaybackExerciseNumber = exerciseNumber;
-        currentPlaybackVersion = version;
-        document.querySelectorAll('.play-toggle-btn').forEach(btn => {
-          const match = Number(btn.dataset.exerciseNumber) === exerciseNumber && btn.dataset.version === version;
-          btn.textContent = match ? 'Stop' : 'Play beat';
-          btn.dataset.playing = match ? 'true' : 'false';
+        sizes.forEach(function (size) {
+          if (size <= remaining) {
+            acc.push(size);
+            walk(remaining - size, acc);
+            acc.pop();
+          }
         });
-        const voice = version === 'sticking' ? ex.sticking : ex.orchestration;
-        const scheduleBarAt = (startTime) => {
-          for (let i = 0; i < 16; i++) {
-            const jitter = (Math.random() - 0.5) * 0.01;
-            const stepTime = startTime + (i * stepSec) + jitter;
-            triggerStepSound(ctx, voice[i], !!ex.ghosts[i], !!ex.accents[i], HH[i], stepTime, i);
-            if (metronomeClick && i % 4 === 0) triggerMetronomeClick(ctx, stepTime, i / 4);
-          }
-        };
-        if (loopPlayback) {
-          nextLoopStartTime = ctx.currentTime + 0.05;
-          scheduleBarAt(nextLoopStartTime);
-          nextLoopStartTime += barSec;
-          const scheduler = () => {
-            if (!isPlaying || currentPlaybackExerciseNumber !== exerciseNumber || currentPlaybackVersion !== version) return;
-            while (nextLoopStartTime !== null && nextLoopStartTime < ctx.currentTime + 0.25) {
-              scheduleBarAt(nextLoopStartTime);
-              nextLoopStartTime += barSec;
+      }
+      walk(total, []);
+      return results;
+    }
+
+    function groupingWeight(grouping, chopMode) {
+      var groups = grouping.length;
+      var variance = 0;
+      for (var i = 1; i < grouping.length; i += 1) {
+        variance += Math.abs(grouping[i] - grouping[i - 1]);
+      }
+      var weight = 1 + variance;
+      if (chopMode) weight += groups * 2;
+      if (!chopMode) weight += Math.max(0, 7 - groups) * 1.5;
+      return weight;
+    }
+
+    function chooseGrouping(selectedSizes, chopMode) {
+      var all = compositions(TOTAL_STEPS, selectedSizes);
+      if (!all.length) return null;
+      var pool = [];
+      all.forEach(function (g) {
+        var copies = Math.max(1, Math.round(groupingWeight(g, chopMode)));
+        for (var i = 0; i < copies; i += 1) pool.push(g);
+      });
+      return choice(pool).slice();
+    }
+
+    function safePush(seq, hand) {
+      var len = seq.length;
+      if (len >= 2 && seq[len - 1] === hand && seq[len - 2] === hand) {
+        seq.push(opposite(hand));
+      } else {
+        seq.push(hand);
+      }
+    }
+
+    function makeSingle(size, start) {
+      var seq = [];
+      var hand = start;
+      for (var i = 0; i < size; i += 1) {
+        safePush(seq, hand);
+        hand = opposite(hand);
+      }
+      return seq;
+    }
+
+    function makeDouble(size, start) {
+      var seq = [];
+      var hand = start;
+      while (seq.length < size) {
+        safePush(seq, hand);
+        if (seq.length < size) safePush(seq, hand);
+        hand = opposite(hand);
+      }
+      return seq.slice(0, size);
+    }
+
+    function makeInvertedDouble(size, start) {
+      var other = opposite(start);
+      var base = [start, other, other, start];
+      var seq = [];
+      while (seq.length < size) {
+        for (var i = 0; i < base.length && seq.length < size; i += 1) {
+          safePush(seq, base[i]);
+        }
+      }
+      return seq;
+    }
+
+    function makeParadiddle(size, start) {
+      var other = opposite(start);
+      var base = [start, other, start, start];
+      var seq = [];
+      while (seq.length < size) {
+        for (var i = 0; i < base.length && seq.length < size; i += 1) {
+          safePush(seq, base[i]);
+        }
+        start = opposite(start);
+        other = opposite(start);
+        base = [start, other, start, start];
+      }
+      return seq;
+    }
+
+    function makeRoll(size, start) {
+      return makeDouble(size, start);
+    }
+
+    function chooseRudiment(size, requested, complexity) {
+      var basePool = ['single', 'double', 'inverted-double', 'paradiddle', 'roll'];
+      if (size === 2) basePool = ['single', 'double'];
+      if (size === 3) basePool = ['single', 'inverted-double'];
+
+      // If specific rudiment selected → strongly bias toward it
+      if (requested && requested !== 'random') {
+        if (Math.random() < 0.75) return requested; // primary identity
+
+        // allow slight variation (still related feel)
+        if (requested === 'paradiddle') return choice(['paradiddle', 'inverted-double']);
+        if (requested === 'double') return choice(['double', 'roll']);
+        return requested;
+      }
+
+      return choice(basePool);
+    }
+
+    function rotateToStart(seq, start) {
+      var out = seq.slice();
+      if (!out.length) return out;
+      if (out[0] === start) return out;
+      for (var i = 1; i < out.length; i += 1) {
+        if (out[i] === start) {
+          return out.slice(i).concat(out.slice(0, i));
+        }
+      }
+      return out;
+    }
+
+    function humanizePattern(seq, rudiment, complexity) {
+      var out = seq.slice();
+      if (out.length < 2) return out;
+
+      // KEEP rudiment identity intact
+      if (rudiment === 'paradiddle') {
+        // very light variation only
+        if (complexity === 'intermediate' && Math.random() < 0.2 && out.length >= 4) {
+          out[out.length - 1] = opposite(out[out.length - 2]);
+        }
+        return out;
+      }
+
+      if (rudiment === 'double' || rudiment === 'roll') {
+        if (Math.random() < 0.4) {
+          for (var i = 1; i < out.length - 1; i += 1) {
+            if (out[i] === out[i - 1] && Math.random() < 0.3) {
+              out[i] = opposite(out[i]);
             }
-            const id = setTimeout(scheduler, 50);
-            scheduledTimeouts.push(id);
-          };
-          scheduledTimeouts.push(setTimeout(scheduler, 50));
-        } else {
-          const startTime = ctx.currentTime + 0.05;
-          scheduleBarAt(startTime);
-          scheduledTimeouts.push(setTimeout(() => clearScheduledPlayback(), (barSec * 1000) + 100));
-        }
-      }
-
-      function renderExercise(ex) {
-        const block = document.createElement('div');
-        block.className = 'exercise';
-        const title = document.createElement('h2');
-        title.textContent = `Exercise ${ex.number} — ${ex.grouping.join(' | ')}`;
-        block.appendChild(title);
-
-        const sTitle = document.createElement('div');
-        sTitle.className = 'chart-title';
-        sTitle.textContent = 'Sticking';
-        block.appendChild(sTitle);
-        const sActions = document.createElement('div');
-        sActions.className = 'chart-actions';
-        const sPlay = document.createElement('button');
-        sPlay.type = 'button';
-        sPlay.textContent = 'Play beat';
-        sPlay.className = 'play-toggle-btn';
-        sPlay.dataset.exerciseNumber = String(ex.number);
-        sPlay.dataset.version = 'sticking';
-        sPlay.dataset.playing = 'false';
-        sPlay.addEventListener('click', () => playExercise(ex.number, 'sticking'));
-        sActions.appendChild(sPlay);
-        block.appendChild(sActions);
-        const sPre = document.createElement('pre');
-        sPre.textContent = renderChart(ex.sticking, ex.accents, ex.grouping, ex.ghosts);
-        block.appendChild(sPre);
-
-        const oTitle = document.createElement('div');
-        oTitle.className = 'chart-title';
-        oTitle.textContent = 'Orchestrating';
-        block.appendChild(oTitle);
-        const oActions = document.createElement('div');
-        oActions.className = 'chart-actions';
-        const oPlay = document.createElement('button');
-        oPlay.type = 'button';
-        oPlay.textContent = 'Play beat';
-        oPlay.className = 'play-toggle-btn';
-        oPlay.dataset.exerciseNumber = String(ex.number);
-        oPlay.dataset.version = 'orchestration';
-        oPlay.dataset.playing = 'false';
-        oPlay.addEventListener('click', () => playExercise(ex.number, 'orchestration'));
-        oActions.appendChild(oPlay);
-        block.appendChild(oActions);
-        const oPre = document.createElement('pre');
-        oPre.textContent = renderChart(ex.orchestration, ex.accents, ex.grouping, ex.ghosts);
-        block.appendChild(oPre);
-        return block;
-      }
-
-      async function copyJson() {
-        if (!lastExercises.length) return;
-        const payload = JSON.stringify(lastExercises, null, 2);
-        const old = els.copyJsonBtn.textContent;
-        try {
-          if (navigator.clipboard && window.isSecureContext) {
-            await navigator.clipboard.writeText(payload);
-          } else {
-            const ta = document.createElement('textarea');
-            ta.value = payload;
-            ta.style.position = 'absolute';
-            ta.style.left = '-9999px';
-            document.body.appendChild(ta);
-            ta.select();
-            document.execCommand('copy');
-            document.body.removeChild(ta);
           }
-          els.copyJsonBtn.textContent = 'Copied';
-        } catch (_) {
-          els.copyJsonBtn.textContent = 'Copy failed';
-        }
-        setTimeout(() => { els.copyJsonBtn.textContent = old; }, 1000);
-      }
-
-      function generateExercises() {
-        const allowedGroupSizes = getSelectedGroupSizes();
-        if (!allowedGroupSizes.length) {
-          els.output.className = 'empty';
-          els.output.textContent = 'Select at least one group size.';
-          lastExercises = [];
-          return;
-        }
-        const count = Number(els.count.value);
-        const complexity = els.complexity.value;
-        const chopMode = els.chopMode.checked;
-        const rudimentBasis = els.rudimentBasis.value;
-        const forceRightStart = els.forceRightStart.checked;
-        const ghostMode = els.ghostMode.checked;
-
-        clearScheduledPlayback();
-        els.output.innerHTML = '';
-        els.output.className = '';
-        try {
-          lastExercises = Array.from({ length: count }, (_, i) => buildExercise(i + 1, complexity, allowedGroupSizes, chopMode, rudimentBasis, forceRightStart, ghostMode));
-          lastExercises.forEach(ex => els.output.appendChild(renderExercise(ex)));
-          els.output.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        } catch (err) {
-          els.output.className = 'empty';
-          els.output.textContent = err.message;
-          lastExercises = [];
         }
       }
 
-      els.groupSizesTrigger.addEventListener('click', () => {
-        els.groupSizesMenu.classList.toggle('hidden');
+      if (rudiment === 'inverted-double') {
+        if (Math.random() < 0.4 && out.length >= 4) {
+          out[out.length - 1] = opposite(out[out.length - 2]);
+        }
+      }
+
+      return out;
+    }
+
+    function patternForRudiment(size, rudiment, start, complexity) {
+      var seq;
+      if (rudiment === 'single') seq = makeSingle(size, start);
+      else if (rudiment === 'double') seq = makeDouble(size, start);
+      else if (rudiment === 'inverted-double') seq = makeInvertedDouble(size, start);
+      else if (rudiment === 'paradiddle') seq = makeParadiddle(size, start);
+      else if (rudiment === 'roll') seq = makeRoll(size, start);
+      else seq = makeSingle(size, start);
+
+      seq = rotateToStart(seq, start);
+      seq = humanizePattern(seq, rudiment, complexity);
+      return seq.slice(0, size);
+    }
+
+    function baseMotifForRudiment(rudiment, lead) {
+      var other = opposite(lead);
+      if (rudiment === 'paradiddle') return [lead, other, lead, lead];
+      if (rudiment === 'inverted-double') return [lead, other, other, lead];
+      if (rudiment === 'double' || rudiment === 'roll') return [lead, lead, other, other];
+      if (rudiment === 'single') return [lead, other];
+      return [lead, other];
+    }
+
+    function takeMotifChunk(size, rudiment, state, complexity) {
+      var motif = state.motif;
+      var idx = state.idx;
+      var seq = [];
+      while (seq.length < size) {
+        seq.push(motif[idx % motif.length]);
+        idx += 1;
+      }
+      seq = humanizePattern(seq, rudiment, complexity);
+      state.idx = idx % motif.length;
+      state.last = seq[seq.length - 1];
+      return seq;
+    }
+
+    function resetMotifState(rudiment, lead) {
+      return {
+        motif: baseMotifForRudiment(rudiment, lead),
+        idx: 0,
+        last: null
+      };
+    }
+
+    function buildAccentSpine(length, complexity, grouping) {
+      var accents = new Array(length).fill(false);
+
+      // Backbeat anchors (2 & 4)
+      if (length >= 16) {
+        accents[4] = true;
+        accents[12] = true;
+      }
+
+      // Phrase (C)
+      if (Math.random() < 0.5) accents[0] = true;
+      if (Math.random() < 0.7) accents[length - 1] = true;
+
+      if (complexity === 'intermediate') {
+        if (Math.random() < 0.35 && length > 8) accents[8] = true;
+        if (Math.random() < 0.25 && length > 2) accents[length - 2] = true;
+      }
+
+      // NEW: subtle group clarity (A influence)
+      if (grouping && grouping.length) {
+        var idx = 0;
+        grouping.forEach(function(size, i) {
+          // don't override strong musical accents
+          if (!accents[idx] && Math.random() < 0.4) {
+            accents[idx] = true;
+          }
+          idx += size;
+        });
+      }
+
+      return accents;
+    }
+
+    function applyGhosts(notes, accents, complexity, enabled) {
+      if (!enabled) return notes.slice();
+      var out = notes.slice();
+      for (var i = 0; i < out.length; i += 1) {
+        if (accents[i]) continue;
+        if (out[i] === 'L') out[i] = 'l';
+        if (complexity === 'intermediate' && out[i] === 'R' && Math.random() < 0.12) out[i] = 'r';
+      }
+      return out;
+    }
+
+    function enforceNoTriples(seq, fallbackSeq) {
+      var out = seq.slice();
+      for (var i = 2; i < out.length; i += 1) {
+        var a = out[i - 2].toUpperCase();
+        var b = out[i - 1].toUpperCase();
+        var c = out[i].toUpperCase();
+        if (a === b && b === c) {
+          if (fallbackSeq && fallbackSeq[i] && fallbackSeq[i].toUpperCase() !== b) {
+            out[i] = fallbackSeq[i];
+          } else if (c === 'K') {
+            out[i] = 'R';
+          } else {
+            out[i] = opposite(c);
+          }
+        }
+      }
+      return out;
+    }
+
+    function orchestrate(notes, accents, chopMode, forceStart) {
+      var out = notes.slice();
+      for (var i = 0; i < out.length; i += 1) {
+        var n = out[i];
+        var upper = n.toUpperCase();
+        if (accents[i]) continue;
+        if (i === 0 && forceStart) continue;
+        if ((upper === 'R' || upper === 'L')) {
+          var chance = chopMode ? 0.42 : 0.26;
+          if (Math.random() < chance) out[i] = 'K';
+        }
+      }
+      return out;
+    }
+
+    function buildExercise(index) {
+      var complexity = document.getElementById('complexity').value;
+      var selectedSizes = getSelectedGroupSizes();
+      var rudiment = document.getElementById('rudiment').value;
+      var startRK = document.getElementById('startToggle').checked;
+      var ghost = document.getElementById('ghostToggle').checked;
+      var chop = document.getElementById('chopToggle').checked;
+      var grouping = chooseGrouping(selectedSizes, chop);
+      if (!grouping) return null;
+
+      var sticking = [];
+      var accents = buildAccentSpine(TOTAL_STEPS, complexity, grouping);
+      var groupRudiments = [];
+      var nextStart = startRK ? 'R' : 'L';
+      var motifState = null;
+      var specificRudimentMode = rudiment && rudiment !== 'random';
+
+      grouping.forEach(function (size, groupIndex) {
+        var groupRudiment = chooseRudiment(size, rudiment, complexity);
+        var seq;
+
+        if (specificRudimentMode) {
+          groupRudiment = rudiment;
+          var shouldContinue = motifState && Math.random() < 0.65;
+          if (!shouldContinue) {
+            motifState = resetMotifState(groupRudiment, nextStart);
+          }
+          seq = takeMotifChunk(size, groupRudiment, motifState, complexity);
+        } else {
+          seq = patternForRudiment(size, groupRudiment, nextStart, complexity);
+        }
+
+        if (groupIndex > 0 && seq.join('') === sticking.slice(sticking.length - size).join('')) {
+          seq = humanizePattern(seq.slice().reverse(), groupRudiment, complexity).slice(0, size);
+          seq = rotateToStart(seq, nextStart);
+          if (specificRudimentMode) {
+            motifState = resetMotifState(groupRudiment, nextStart);
+            motifState.idx = Math.min(seq.length % motifState.motif.length, motifState.motif.length - 1);
+            motifState.last = seq[seq.length - 1];
+          }
+        }
+
+        groupRudiments.push(groupRudiment);
+        sticking = sticking.concat(seq);
+        nextStart = opposite(seq[seq.length - 1].toUpperCase());
       });
-      els.selectAllGroupsBtn.addEventListener('click', () => setAllGroupSizes(true));
-      els.deselectAllGroupsBtn.addEventListener('click', () => setAllGroupSizes(false));
-      document.querySelectorAll('.group-size-option').forEach(el => el.addEventListener('change', updateGroupSizesSummary));
-      document.addEventListener('click', event => {
-        if (!els.groupSizesMenu.contains(event.target) && !els.groupSizesTrigger.contains(event.target)) {
-          els.groupSizesMenu.classList.add('hidden');
+
+      sticking = enforceNoTriples(sticking);
+      sticking = applyGhosts(sticking, accents, complexity, ghost);
+      var orchestration = orchestrate(sticking, accents, chop, startRK);
+      orchestration = enforceNoTriples(orchestration, sticking);
+
+      return {
+        index: index,
+        grouping: grouping,
+        groupRudiments: groupRudiments,
+        sticking: sticking,
+        orchestration: orchestration,
+        accents: accents,
+        hh: makeHHRow(TOTAL_STEPS)
+      };
+    }
+
+    function makeHHRow(length) {
+      var row = [];
+      for (var i = 0; i < length; i += 1) row.push(i % 4 === 0 ? 'x' : '-');
+      return row;
+    }
+
+    function renderGroupedRow(tokens, grouping) {
+      var out = [];
+      var idx = 0;
+      grouping.forEach(function (size) {
+        out.push(tokens.slice(idx, idx + size).join(' '));
+        idx += size;
+      });
+      return out.join(' | ');
+    }
+
+    function accentRow(notes, accents) {
+      var row = [];
+      for (var i = 0; i < notes.length; i += 1) {
+        row.push(accents[i] ? '>' : '.');
+      }
+      return row;
+    }
+
+    function chartText(notes, accents, grouping) {
+      return renderGroupedRow(accentRow(notes, accents), grouping) + '\n' +
+        renderGroupedRow(makeHHRow(notes.length), grouping) + '\n' +
+        renderGroupedRow(notes, grouping);
+    }
+
+    function ensureAudio() {
+      if (!audioCtx) {
+        var Ctx = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new Ctx();
+      }
+      if (audioCtx.state === 'suspended') {
+        return audioCtx.resume().then(function () { return audioCtx; });
+      }
+      return Promise.resolve(audioCtx);
+    }
+
+    function loadSample(ctx, url) {
+      return fetch(url)
+        .then(function (res) {
+          if (!res.ok) throw new Error(url + ' failed');
+          return res.arrayBuffer();
+        })
+        .then(function (buffer) { return ctx.decodeAudioData(buffer); });
+    }
+
+    function ensureSamples(ctx) {
+      if (samplesAttempted) return Promise.resolve(sampleBuffers);
+      samplesAttempted = true;
+      return Promise.allSettled([
+        loadSample(ctx, 'kick.mp3'),
+        loadSample(ctx, 'snare.mp3'),
+        loadSample(ctx, 'hihat.mp3')
+      ]).then(function (results) {
+        if (results[0].status === 'fulfilled') sampleBuffers.kick = results[0].value;
+        if (results[1].status === 'fulfilled') sampleBuffers.snare = results[1].value;
+        if (results[2].status === 'fulfilled') sampleBuffers.hihat = results[2].value;
+        return sampleBuffers;
+      });
+    }
+
+    function stopPlayback() {
+      if (activeTimer) {
+        clearTimeout(activeTimer);
+        clearInterval(activeTimer);
+        activeTimer = null;
+      }
+      activeNodes.forEach(function (node) {
+        try { if (node.stop) node.stop(); } catch (e) {}
+        try { if (node.disconnect) node.disconnect(); } catch (e) {}
+      });
+      activeNodes = [];
+      if (activeButton) {
+        activeButton.textContent = 'Play beat';
+        activeButton = null;
+      }
+    }
+
+    function parseChart(preEl) {
+      var lines = preEl.textContent.trim().split(String.fromCharCode(10));
+      return lines.map(function (line) {
+        return line.split('|').join(' ').trim().split(' ').filter(Boolean);
+      });
+    }
+
+    function playTone(ctx, freq, start, duration, gainValue, type) {
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, start);
+      gain.gain.setValueAtTime(gainValue, start);
+      gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(start);
+      osc.stop(start + duration);
+      activeNodes.push(osc, gain);
+    }
+
+    function playBuffer(ctx, buffer, start, gainValue, playbackRate) {
+      var src = ctx.createBufferSource();
+      var gain = ctx.createGain();
+      src.buffer = buffer;
+      src.playbackRate.value = playbackRate || 1;
+      gain.gain.value = gainValue;
+      src.connect(gain);
+      gain.connect(ctx.destination);
+      src.start(start);
+      activeNodes.push(src, gain);
+    }
+
+    function triggerStep(ctx, note, hat, accent, start, clickOn, stepIndex) {
+      var upper = note.toUpperCase();
+      if ((hat === 'x' || hat === 'X') && sampleBuffers.hihat) {
+        playBuffer(ctx, sampleBuffers.hihat, start, 0.16, 1.0);
+      } else if (hat === 'x' || hat === 'X') {
+        playTone(ctx, 1400, start, 0.04, 0.035, 'square');
+      }
+
+      if (clickOn && stepIndex % 4 === 0) {
+        if (sampleBuffers.hihat) playBuffer(ctx, sampleBuffers.hihat, start, 0.28, 1.18);
+        else playTone(ctx, 1800, start, 0.03, 0.06, 'square');
+      }
+
+      if (upper === 'K') {
+        if (sampleBuffers.kick) playBuffer(ctx, sampleBuffers.kick, start, accent ? 1.0 : 0.82, 1.0);
+        else playTone(ctx, accent ? 95 : 75, start, 0.12, accent ? 0.34 : 0.24, 'sine');
+      }
+
+      if (upper === 'R' || upper === 'L') {
+        var ghost = note === note.toLowerCase();
+        if (sampleBuffers.snare) playBuffer(ctx, sampleBuffers.snare, start, ghost ? 0.42 : (accent ? 0.95 : 0.72), ghost ? 0.985 : 1.0);
+        else playTone(ctx, accent ? 210 : 180, start, 0.08, ghost ? 0.06 : (accent ? 0.17 : 0.1), 'triangle');
+      }
+    }
+
+    function playChart(button) {
+      if (activeButton === button) {
+        stopPlayback();
+        return;
+      }
+
+      var shell = button.parentElement && button.parentElement.nextElementSibling;
+      var preEl = shell ? shell.querySelector('pre') : null;
+      if (!preEl) return;
+
+      var rows = parseChart(preEl);
+      var accents = rows[0] || [];
+      var hats = rows[1] || [];
+      var notes = rows[2] || [];
+      var bpmInput = document.getElementById('bpm');
+      var bpm = parseInt(bpmInput ? bpmInput.value : '80', 10) || 80;
+      var stepMs = (60000 / bpm) / 4;
+      var shouldLoop = document.getElementById('loopToggle').checked;
+      var clickOn = document.getElementById('clickToggle').checked;
+      var cycleMs = notes.length * stepMs;
+
+      stopPlayback();
+      ensureAudio().then(function (ctx) {
+        return ensureSamples(ctx).then(function () { return ctx; });
+      }).then(function (ctx) {
+        function scheduleCycle(startTime) {
+          notes.forEach(function (note, i) {
+            var when = startTime + (i * stepMs) / 1000;
+            triggerStep(ctx, note, hats[i], accents[i] === '>', when, clickOn, i);
+          });
+        }
+
+        activeButton = button;
+        activeButton.textContent = 'Stop';
+
+        scheduleCycle(ctx.currentTime + 0.04);
+
+        if (shouldLoop) {
+          activeTimer = setInterval(function () {
+            if (activeButton !== button) return;
+            scheduleCycle(ctx.currentTime + 0.04);
+          }, cycleMs);
+        } else {
+          activeTimer = setTimeout(function () {
+            stopPlayback();
+          }, cycleMs + 140);
         }
       });
-      els.generateBtn.addEventListener('click', generateExercises);
-      els.copyJsonBtn.addEventListener('click', copyJson);
-      updateGroupSizesSummary();
+    }
+
+    function makeExerciseMarkup(ex, isFavourite) {
+      var sig = exerciseSignature(ex);
+      var isFav = isFavourite || isFavourite === undefined && isFavourite !== false && isFavourite;
+
+      var favActive = loadFavourites().some(function (item) {
+        return exerciseSignature(item) === sig;
+      });
+
+      var heart = favActive ? '♥' : '♡';
+      var activeClass = favActive ? 'active' : '';
+
+      return '<div class="exercise">' +
+        '<button class="favourite-btn ' + activeClass + '" data-signature="' + sig + '">' + heart + '</button>' +
+        '<h2>Exercise ' + ex.index + ' — ' + ex.grouping.join('|') + '</h2>' +
+        '<div class="chart-title">Sticking</div>' +
+        '<div class="chart-actions"><button type="button" class="play-btn">Play beat</button></div>' +
+        '<div class="chart-shell"><pre>' + chartText(ex.sticking, ex.accents, ex.grouping) + '</pre></div>' +
+        '<div class="chart-title">Orchestrating</div>' +
+        '<div class="chart-actions"><button type="button" class="play-btn">Play beat</button></div>' +
+        '<div class="chart-shell"><pre>' + chartText(ex.orchestration, ex.accents, ex.grouping) + '</pre></div>' +
+      '</div>';
+    }
+
+    function getSelectedGroupSizes() {
+      return Array.from(document.querySelectorAll('.group-size-option:checked'))
+        .map(function (el) { return Number(el.value); })
+        .sort(function (a, b) { return a - b; });
+    }
+
+    function updateGroupSizesSummary() {
+      var values = getSelectedGroupSizes();
+      document.getElementById('groupSizesSummary').textContent = values.length ? values.join(', ') : 'None selected';
+    }
+
+    function exerciseSignature(ex) {
+      return [
+        ex.grouping.join('-'),
+        ex.sticking.join('')
+      ].join('::');
+    }
+
+    function loadFavourites() {
+      try {
+        return JSON.parse(localStorage.getItem('drumFillFavourites') || '[]');
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveFavourites(favs) {
+      localStorage.setItem('drumFillFavourites', JSON.stringify(favs));
+    }
+
+    function isFavourite(ex) {
+      var sig = exerciseSignature(ex);
+      return loadFavourites().some(function (item) {
+        return exerciseSignature(item) === sig;
+      });
+    }
+
+    function addFavourite(ex) {
+      var favs = loadFavourites();
+      var sig = exerciseSignature(ex);
+      if (favs.some(function (item) { return exerciseSignature(item) === sig; })) return;
+      favs.unshift(JSON.parse(JSON.stringify(ex)));
+      saveFavourites(favs);
+      renderFavourites();
+      updateFavouriteButtons();
+    }
+
+    function removeFavouriteBySignature(sig) {
+      var favs = loadFavourites().filter(function (item) {
+        return exerciseSignature(item) !== sig;
+      });
+      saveFavourites(favs);
+      renderFavourites();
+      updateFavouriteButtons();
+    }
+
+    function renderFavourites() {
+      var favs = loadFavourites();
+      var list = document.getElementById('favouritesList');
+      var toggleBtn = document.getElementById('toggleFavouritesBtn');
+      toggleBtn.textContent = 'Favourites (' + favs.length + ')';
+
+      if (!favs.length) {
+        list.className = 'empty';
+        list.textContent = 'No favourites saved yet.';
+        return;
+      }
+
+      list.className = '';
+      list.innerHTML = '';
+      favs.forEach(function (ex, idx) {
+        ex.index = idx + 1;
+        list.insertAdjacentHTML('beforeend', makeExerciseMarkup(ex, true));
+      });
+    }
+
+    function updateFavouriteButtons() {
+  document.querySelectorAll('.favourite-btn').forEach(function (btn) {
+    var sig = btn.getAttribute('data-signature');
+    var fav = loadFavourites().some(function (item) {
+      return exerciseSignature(item) === sig;
+    });
+
+    btn.textContent = fav ? '♥' : '♡';
+    btn.classList.toggle('active', fav);
+  });
+}
+
+// Single clean event handler
+document.addEventListener('click', function (event) {
+  var playBtn = event.target.closest('.chart-actions button');
+  if (playBtn) {
+    playChart(playBtn);
+    return;
+  }
+
+  var favBtn = event.target.closest('.favourite-btn');
+  if (favBtn) {
+    var sig = favBtn.getAttribute('data-signature');
+    var favs = loadFavourites();
+    var exists = favs.some(function (item) {
+      return exerciseSignature(item) === sig;
+    });
+
+    if (exists) {
+      removeFavouriteBySignature(sig);
+    } else {
+      var match = lastExercises.find(function (ex) {
+        return exerciseSignature(ex) === sig;
+      }) || loadFavourites().find(function (ex) {
+        return exerciseSignature(ex) === sig;
+      });
+      if (match) addFavourite(match);
+    }
+    return;
+  }
+
+  var toggleFavsBtn = event.target.closest('#toggleFavouritesBtn');
+  if (toggleFavsBtn) {
+    document.getElementById('favouritesPanel').classList.toggle('hidden-panel');
+    return;
+  }
+
+  if (!groupSizesTrigger.contains(event.target) && !groupSizesMenu.contains(event.target)) {
+    groupSizesMenu.classList.add('hidden');
+  }
+});
+
+// Group size menu controls
+var groupSizesTrigger = document.getElementById('groupSizesTrigger');
+var groupSizesMenu = document.getElementById('groupSizesMenu');
+var selectAllGroupsBtn = document.getElementById('selectAllGroupsBtn');
+var deselectAllGroupsBtn = document.getElementById('deselectAllGroupsBtn');
+
+groupSizesTrigger.addEventListener('click', function () {
+  groupSizesMenu.classList.toggle('hidden');
+});
+
+selectAllGroupsBtn.addEventListener('click', function () {
+  document.querySelectorAll('.group-size-option').forEach(function (el) { el.checked = true; });
+  updateGroupSizesSummary();
+});
+
+deselectAllGroupsBtn.addEventListener('click', function () {
+  document.querySelectorAll('.group-size-option').forEach(function (el) { el.checked = false; });
+  updateGroupSizesSummary();
+});
+
+updateGroupSizesSummary();
+renderFavourites();
+    document.getElementById('generateBtn').addEventListener('click', generate);
+
+function generate() {
+  var count = parseInt(document.getElementById('count').value, 10) || 1;
+  var resultsEl = document.getElementById('results');
+
+  stopPlayback();
+  lastExercises = [];
+
+  var html = '';
+
+  for (var i = 0; i < count; i += 1) {
+    var ex = buildExercise(i + 1);
+    if (!ex) continue;
+    lastExercises.push(ex);
+    html += makeExerciseMarkup(ex);
+  }
+
+  if (!html) {
+    resultsEl.className = 'empty';
+    resultsEl.textContent = 'No valid combinations. Adjust group sizes.';
+    return;
+  }
+
+  resultsEl.className = '';
+  resultsEl.innerHTML = html;
+
+  updateFavouriteButtons();
+}
+    document.getElementById('copyJsonBtn').addEventListener('click', function () {
+      var payload = {
+        count: document.getElementById('count').value,
+        complexity: document.getElementById('complexity').value,
+        groupSizes: getSelectedGroupSizes(),
+        rudiment: document.getElementById('rudiment').value,
+        startRK: document.getElementById('startToggle').checked,
+        ghost: document.getElementById('ghostToggle').checked,
+        chop: document.getElementById('chopToggle').checked,
+        bpm: document.getElementById('bpm').value,
+        click: document.getElementById('clickToggle').checked,
+        loop: document.getElementById('loopToggle').checked,
+        exercises: lastExercises
+      };
+      navigator.clipboard.writeText(JSON.stringify(payload, null, 2));
     });
   </script>
 </body>
