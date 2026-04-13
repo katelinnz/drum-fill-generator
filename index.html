@@ -480,7 +480,7 @@
       <h1>Drum Fill Generator</h1>
       <div style="display:flex; align-items:center; gap:12px;">
         <button id="toggleFavouritesBtn" type="button" style="width:auto; min-height:42px; padding:0 16px; font-size:16px; background:var(--button-2);">Favourites (0)</button>
-        <div class="version">v1.39</div>
+        <div class="version">v1.40</div>
       </div>
     </div>
 
@@ -1077,12 +1077,10 @@
       }
 
       if (clickOn && stepIndex % 4 === 0) {
-        // Force clearly audible click (separate from groove hat)
-        if (sampleBuffers.hihat) {
-          playBuffer(ctx, sampleBuffers.hihat, start, 0.6, 1.4); // louder + higher pitch
-        } else {
-          playTone(ctx, 2000, start, 0.03, 0.08, 'square');
-        }
+        // Always use a distinct synth click so it cuts through the sampled hat
+        var clickFreq = stepIndex === 0 ? 2300 : 1850;
+        var clickGain = stepIndex === 0 ? 0.11 : 0.075;
+        playTone(ctx, clickFreq, start, 0.02, clickGain, 'square');
       }
 
       if (upper === 'K') {
