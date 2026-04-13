@@ -490,7 +490,7 @@
       <h1>Drum Fill Generator</h1>
       <div style="display:flex; align-items:center; gap:12px;">
         <button id="toggleFavouritesBtn" type="button" style="width:auto; min-height:42px; padding:0 16px; font-size:16px; background:var(--button-2);">Favourites (0)</button>
-        <div class="version">v1.36</div>
+        <div class="version">v1.37</div>
       </div>
     </div>
 
@@ -1056,7 +1056,8 @@
       var gain = ctx.createGain();
       src.buffer = buffer;
       src.playbackRate.value = playbackRate || 1;
-      gain.gain.value = gainValue;
+      gain.gain.setValueAtTime(Math.max(0.0001, gainValue), start);
+      gain.gain.linearRampToValueAtTime(Math.max(0.0001, gainValue * 0.92), start + 0.012);
       src.connect(gain);
       gain.connect(ctx.destination);
       src.start(start);
@@ -1065,25 +1066,32 @@
 
     function triggerStep(ctx, note, hat, accent, start, clickOn, stepIndex) {
       var upper = note.toUpperCase();
+      var ghost = note === note.toLowerCase();
+      var hatGain = accent ? 0.18 : 0.12;
+      var hatRate = accent ? 1.03 : 0.99;
+
       if ((hat === 'x' || hat === 'X') && sampleBuffers.hihat) {
-        playBuffer(ctx, sampleBuffers.hihat, start, 0.16, 1.0);
+        playBuffer(ctx, sampleBuffers.hihat, start, hatGain, hatRate);
       } else if (hat === 'x' || hat === 'X') {
-        playTone(ctx, 1400, start, 0.04, 0.035, 'square');
+        playTone(ctx, accent ? 1500 : 1400, start, 0.04, accent ? 0.05 : 0.03, 'square');
       }
 
       if (clickOn && stepIndex % 4 === 0) {
-        if (sampleBuffers.hihat) playBuffer(ctx, sampleBuffers.hihat, start, 0.28, 1.18);
+        if (sampleBuffers.hihat) playBuffer(ctx, sampleBuffers.hihat, start, 0.34, 1.2);
         else playTone(ctx, 1800, start, 0.03, 0.06, 'square');
       }
 
       if (upper === 'K') {
-        if (sampleBuffers.kick) playBuffer(ctx, sampleBuffers.kick, start, accent ? 1.0 : 0.82, 1.0);
+        var kickGain = accent ? 1.08 : 0.78;
+        var kickRate = accent ? 1.01 : 0.98;
+        if (sampleBuffers.kick) playBuffer(ctx, sampleBuffers.kick, start, kickGain, kickRate);
         else playTone(ctx, accent ? 95 : 75, start, 0.12, accent ? 0.34 : 0.24, 'sine');
       }
 
       if (upper === 'R' || upper === 'L') {
-        var ghost = note === note.toLowerCase();
-        if (sampleBuffers.snare) playBuffer(ctx, sampleBuffers.snare, start, ghost ? 0.42 : (accent ? 0.95 : 0.72), ghost ? 0.985 : 1.0);
+        var snareGain = ghost ? 0.22 : (accent ? 1.05 : 0.66);
+        var snareRate = ghost ? 0.97 : (accent ? 1.02 : 0.995);
+        if (sampleBuffers.snare) playBuffer(ctx, sampleBuffers.snare, start, snareGain, snareRate);
         else playTone(ctx, accent ? 210 : 180, start, 0.08, ghost ? 0.06 : (accent ? 0.17 : 0.1), 'triangle');
       }
     }
