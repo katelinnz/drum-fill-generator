@@ -480,7 +480,7 @@
       <h1>Drum Fill Generator</h1>
       <div style="display:flex; align-items:center; gap:12px;">
         <button id="toggleFavouritesBtn" type="button" style="width:auto; min-height:42px; padding:0 16px; font-size:16px; background:var(--button-2);">Favourites (0)</button>
-        <div class="version">v1.41</div>
+        <div class="version">v1.42</div>
       </div>
     </div>
 
@@ -1078,7 +1078,8 @@
 
       if (clickOn && stepIndex % 4 === 0) {
         // Slight delay to align with sample attack (samples have latency vs osc)
-        var clickOffset = (sampleBuffers.hihat || sampleBuffers.snare || sampleBuffers.kick) ? 0.004 : 0;
+        // Increased offset — sample attack is later than expected
+        var clickOffset = (sampleBuffers.hihat || sampleBuffers.snare || sampleBuffers.kick) ? 0.01 : 0;
         var clickStart = start + clickOffset;
 
         var clickFreq = stepIndex === 0 ? 2300 : 1850;
